@@ -6,7 +6,7 @@ import io
 
 import hydra
 from omegaconf import DictConfig
-from lama.bin.predict_web_server import main as lama_prediction
+from lama_predict import main as lama_predict
 
 import os
 import yaml
@@ -69,7 +69,7 @@ def echo_image():
   masked_image.save(masked_image_stream, format='PNG')
   masked_image_stream.seek(0)
 
-  lama_prediction(config)
+  lama_predict(config)
 
   with open("web_server_output/server_mask.png", "rb") as image_file:
     image_bytes = image_file.read() 
