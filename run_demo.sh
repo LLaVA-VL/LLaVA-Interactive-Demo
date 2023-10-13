@@ -27,7 +27,7 @@ sleep 10
 (
 conda deactivate; \
 conda activate c4c_env_test; \
-export C4C_HOME=.; \
+export LLAVA_INTERACTIVE_HOME=.; \
 python app.py
 )
 
