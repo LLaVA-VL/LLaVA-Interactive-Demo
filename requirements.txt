@@ -1,0 +1,54 @@
+#python=3.10.8
+albumentations==1.3.0
+accelerate==0.20.3
+altair==5.0.1
+cityscapesscripts==2.2.2
+#- cudatoolkit=11.3.1=h9edb442_11
+diffusers==0.11.1
+diffdist==0.1
+ftfy==6.1.1
+fvcore==0.1.5.post20221221
+imageio==2.9.0
+imageio-ffmpeg==0.4.2
+invisible-watermark==0.1.5
+json_tricks==3.17.1
+kornia==0.6.9
+mup==1.0.0
+nltk==3.8.1
+numpy==1.23.1
+numba==0.57.1
+openai==0.27.8
+omegaconf==2.1.1
+opencv-python==4.7.0.72
+opencv-python-headless==4.7.0.72
+pandas==2.0.3
+pip==22.2.2
+pillow==9.4.0 #per dectectron2 0.6.0
+pyarrow==12.0.1
+pycocotools==2.0.5 #2.0.4 won't build
+pydantic==1.10.9 #gradio needs this version
+pyyaml==6.0
+protobuf==3.20.3
+pytorch-lightning==1.4.2
+regex==2023.6.3
+scikit-image==0.20.0
+scikit-learn==1.2.2
+sentencepiece==0.1.99
+shapely==2.0.1
+scann==1.2.7
+streamlit==1.12.1
+timm==0.4.12
+#torch==2.0.1 #1.12.1
+torch==2.0.1+cu117 --find-links https://download.pytorch.org/whl/cu117
+#torchvision==0.15.2 #0.13.1
+torchvision==0.15.2+cu117 --find-links https://download.pytorch.org/whl/cu117
+test-tube==0.7.5
+transformers==4.28.0 #.dev0
+vision-datasets==0.2.2
+#xformers==0.0.21.dev556+git.9d3d92c #no longer exists, also need torch 2.0.1
+#xformers==0.0.13
+yacs==0.1.8
+clip @ git+https://github.com/openai/CLIP.git@a9b1bf5920416aaeaec965c25dd9e8f98c864f16
+openai-whisper @ git+https://github.com/openai/whisper.git@248b6cb124225dd263bb9bd32d060b6517e067f8
+einops @ git+https://github.com/arogozhnikov/einops.git
+detectron2 @ git+https://github.com/maureenzou/detectron2-xyz.git@42121d75e10d9f858f3a91b6a39f5722c02868f0
