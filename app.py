@@ -11,11 +11,11 @@ import requests
 from functools import partial                
 from PIL import Image, ImageOps
 
-sys.path.append(os.path.join(os.environ['C4C_HOME'], 'GLIGEN/demo'))
+sys.path.append(os.path.join(os.environ['LLAVA_INTERACTIVE_HOME'], 'GLIGEN/demo'))
 import GLIGEN.demo.app as GLIGEN
-sys.path.append(os.path.join(os.environ['C4C_HOME'], 'SEEM/demo_code'))
+sys.path.append(os.path.join(os.environ['LLAVA_INTERACTIVE_HOME'], 'SEEM/demo_code'))
 import SEEM.demo_code.app as SEEM #must import GLIGEN_app before this. Otherwise, it will hit a protobuf error
-sys.path.append(os.path.join(os.environ['C4C_HOME'], 'LLaVA'))
+sys.path.append(os.path.join(os.environ['LLAVA_INTERACTIVE_HOME'], 'LLaVA'))
 import LLaVA.llava.serve.gradio_web_server as LLAVA
 
 class ImageMask(gr.components.Image):
