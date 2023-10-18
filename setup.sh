@@ -17,7 +17,7 @@ cd ..
 
 #setting up lama
 cd lama
-conda env create -f conda_env.yml
+conda env create --name lama -f conda_env.yml
 conda activate lama
 conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch -y
 #pip install pytorch-lightning==1.2.9

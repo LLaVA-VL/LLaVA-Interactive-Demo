@@ -5,6 +5,9 @@ LLaVA-Interactive
 
 ```bash
 git clone https://github.com/LLaVA-VL/LLaVA-Interactive-Demo.git
+conda create -n llava_int -c conda_forge python=3.10.8 pytorch=2.0.1
+conda activate llava_int
+pip install -r requirements.txt
 cd LLaVA-Interactive-Demo
 source setup.sh
 chmod +x run_demo.sh
