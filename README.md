@@ -18,4 +18,4 @@ source setup.sh
 ```
 
 # License
-This project including LLaVA and SEEM are licensed under the Apache License. See the [LICENSE] (LICENSE) file for more details. The GLIGEN project is licensed under the MIT License.
+This project including LLaVA and SEEM are licensed under the Apache License. See the [LICENSE](LICENSE) file for more details. The GLIGEN project is licensed under the MIT License.
