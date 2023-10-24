@@ -1,5 +1,10 @@
 #!/bin/bash
 
+pkill -9 -f llava.serve.controller
+pkill -9 -f llava.serve.model_worker
+pkill -9 -f lama_server
+pkill -9 -f llava_interactive
+
 eval "$(conda shell.bash hook)"
 
 (
@@ -26,8 +31,8 @@ sleep 10
 
 (
 conda deactivate; \
-conda activate c4c_env_test; \
+conda activate llava_int; \
 export LLAVA_INTERACTIVE_HOME=.; \
-python app.py
+python llava_interactive.py
 )
 
