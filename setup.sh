@@ -29,5 +29,6 @@ pip install pytorch-lightning
 git clone https://huggingface.co/smartywu/big-lama download
 unzip download/big-lama.zip
 
+conda deactivate
 cd ..
 echo "Done setting up."
