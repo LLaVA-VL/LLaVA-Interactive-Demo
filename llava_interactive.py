@@ -411,13 +411,9 @@ def copy_to_llava_input(img):
     if (isinstance(img, Image.Image) is not True):
         img = Image.fromarray(img)
     return img
-
-title_markdown = ("""
-# <p style="text-align: center;">LLaVA Interactive</p> 
-""")
                 
 def build_demo():
-    demo = gr.Blocks(title="LLaVA Interactive", css=css+GLIGEN.css)
+    demo = gr.Blocks(title="🌋 LLaVA-Interactive", css=css+GLIGEN.css)
     with demo:
         compose_state = gr.State({'boxes': [], 'move_no': 0, 'base_layer': None, 'segment_info': None, 'seg_boxes': {}, 'changed_objects': []})
         llava_state = gr.State()
