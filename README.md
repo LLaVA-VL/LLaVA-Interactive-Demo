@@ -7,11 +7,11 @@
 
 # Install
 
-Follow the steps below: 
+Installing this project requires CUDA 11.7 or above. Follow the steps below: 
 
 ```bash
 git clone https://github.com/LLaVA-VL/LLaVA-Interactive-Demo.git
-conda create -n llava_int -c conda-forge python=3.10.8 pytorch=2.0.1 -y
+conda create -n llava_int -c conda-forge -c pytorch python=3.10.8 pytorch=2.0.1 -y
 conda activate llava_int
 cd LLaVA-Interactive-Demo
 pip install -r requirements.txt
