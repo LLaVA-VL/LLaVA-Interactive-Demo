@@ -69,5 +69,4 @@
         "--env-file",
         ".devcontainer/devcontainer.env"
     ],
-    // "remoteUser": "root"
 }
