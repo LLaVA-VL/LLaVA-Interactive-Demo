@@ -8,7 +8,7 @@ import cv2
 import gradio as gr
 import numpy as np
 import requests
-from functools import partial                
+from functools import partial
 from PIL import Image, ImageOps
 
 sys.path.append(os.path.join(os.environ['LLAVA_INTERACTIVE_HOME'], 'GLIGEN/demo'))
@@ -31,7 +31,7 @@ class ImageMask(gr.components.Image):
     def preprocess(self, x):
         if isinstance(x, str):
             x = {'image': x, 'mask': x}
-        elif isinstance(x, dict):            
+        elif isinstance(x, dict):
             if (x['mask'] is None and x['image'] is None):
                 x
             elif (x['image'] is None):
@@ -102,7 +102,7 @@ def changed_objects_handler(mask_dilate_slider, state, evt: gr.SelectData):
                 new_i = i + pos_y
                 new_j = j + pos_x
                 if new_i >= 0 and new_i < img.shape[0] and new_j >= 0 and new_j < img.shape[1]:
-                    new_img[new_i, new_j] = img[i, j]                        
+                    new_img[new_i, new_j] = img[i, j]
                 img[i, j] = 0
 
     bbox = get_bounding_box(new_img) #returns None if obj moved out of scene
@@ -110,7 +110,7 @@ def changed_objects_handler(mask_dilate_slider, state, evt: gr.SelectData):
     state['changed_objects'].append({'id': obj_id, 'img': new_img, 'text': state['segment_info'][obj_id], 'box': bbox})
 
     #Enable for debugging only. See if the composited image is correct.
-    #composed_img_updated = composite_all_layers(state['base_layer'], state['changed_objects'])    
+    #composed_img_updated = composite_all_layers(state['base_layer'], state['changed_objects'])
     #filename = str(f"composited_imge_{state['move_no']}") + ".png"
     #cv2.imwrite(filename, composed_img_updated[:, :, 0:3])
 
@@ -135,15 +135,15 @@ def get_base_layer_mask(state):
     mask_image = Image.fromarray(mask)
     if (mask_image.mode != "L"):
         mask_image = mask_image.convert("L")
-    mask_image = ImageOps.invert(mask_image)      
-    #mask_image.save("mask_image.png")      
+    mask_image = ImageOps.invert(mask_image)
+    #mask_image.save("mask_image.png")
 
     img = state['orignal_segmented']
     orig_image = Image.fromarray(img[:,:,:3])
-    orig_image.save("orig_image.png")          
+    orig_image.save("orig_image.png")
     transparent = Image.new(orig_image.mode, orig_image.size, (0, 0, 0, 0))
     masked_image = Image.composite(orig_image, transparent, mask_image)
-    #masked_image.save("get_masked_background_image.png")  
+    #masked_image.save("get_masked_background_image.png")
 
     return masked_image, state
 
@@ -169,11 +169,11 @@ def get_inpainted_background(state, mask_dilate_slider):
         mask = state['base_layer_mask']
     if (isinstance(mask, Image.Image) is not True):
         mask = Image.fromarray(mask)
-    
+
     #mask has background as 1, lama needs object to be 1
     if (mask.mode != "L"):
         mask = mask.convert("L")
-    mask = ImageOps.invert(mask)     
+    mask = ImageOps.invert(mask)
 
     # Create a BytesIO object and save the image there
     buffer = io.BytesIO()
@@ -203,7 +203,7 @@ def get_inpainted_background(state, mask_dilate_slider):
     else:
         # The request failed
         print("Error: HTTP status code {}".format(response.status_code))
-        print(response.text)    
+        print(response.text)
 
     return image
 
@@ -218,19 +218,19 @@ def get_enlarged_masked_background(state, mask_dilate_slider):
     mask_image = Image.fromarray(mask_dilated)
     if (mask_image.mode != "L"):
         mask_image = mask_image.convert("L")
-    mask_image = ImageOps.invert(mask_image)     
-    state['base_layer_mask_enlarged'] = mask_image     
-    #mask_image.save("enlarged_mask_image.png")      
+    mask_image = ImageOps.invert(mask_image)
+    state['base_layer_mask_enlarged'] = mask_image
+    #mask_image.save("enlarged_mask_image.png")
 
     img = state['orignal_segmented']
     orig_image = Image.fromarray(img[:,:,:3])
     transparent = Image.new(orig_image.mode, orig_image.size, (0, 0, 0, 0))
     masked_image = Image.composite(orig_image, transparent, mask_image)
-    #masked_image.save("enlarged_masked_background_image.png")  
+    #masked_image.save("enlarged_masked_background_image.png")
 
     return masked_image, state
 
-def get_base_layer_inpainted(state, mask_dilate_slider): 
+def get_base_layer_inpainted(state, mask_dilate_slider):
     masked_img, state = get_enlarged_masked_background(state, mask_dilate_slider)
     inpainted_img = get_inpainted_background(state, mask_dilate_slider)
     state['base_layer_inpainted'] = np.array(inpainted_img)
@@ -251,7 +251,7 @@ def log_image_and_mask(img, mask): #for debugging use only
     cv2.imwrite(f"img_{counter}_mask.png", mask.astype(np.uint8) * 255)
 
 def get_segments (img, task, reftxt, mask_dilate_slider, state):
-    assert (isinstance(state, dict))    
+    assert (isinstance(state, dict))
     state['orignal_segmented'] = None
     state['base_layer'] = None
     state['base_layer_masked'] = None
@@ -263,7 +263,7 @@ def get_segments (img, task, reftxt, mask_dilate_slider, state):
     state['changed_objects'] = []
     state['move_no'] = 0
 
-    print("Calling SEEM_app.inference")    
+    print("Calling SEEM_app.inference")
 
     if isinstance(img['image'], np.ndarray):
         pil_image = Image.fromarray(img['image'])
@@ -291,7 +291,7 @@ def get_segments (img, task, reftxt, mask_dilate_slider, state):
         print(f"obj_id={obj_id}, lable={lable}, bbox={bbox}")
         state['seg_boxes'][obj_id] = bbox
 
-    #add a special event, obj stays at the original spot 
+    #add a special event, obj stays at the original spot
     data = {}
     data["index"] = (0, 0)
     data["value"] = 254 # ==> 1, the only object allowed for now
@@ -321,10 +321,10 @@ def get_generated(grounding_text, fix_seed, rand_seed, state):
 
     if (len(state['boxes']) == 0):
         if (len(grounding_text) != 0):
-            grounding_text = []            
+            grounding_text = []
             print("No grounding box found. Grounding text will be ignored.")
         return inpainted_background_img.copy(), state, None
-    
+
     print('Calling GLIGEN_app.generate')
     print('grounding_text: ', grounding_text)
     print(state['boxes'], len(state['boxes']))
@@ -333,7 +333,7 @@ def get_generated(grounding_text, fix_seed, rand_seed, state):
          raise gr.Error('Please providing grounding text to match the identified object')
     out_gen_1, _, _, _, state = GLIGEN.generate(task='Grounded Inpainting', language_instruction='',
                         grounding_texts=grounding_text, sketch_pad=inpainted_background_img,
-                        alpha_sample=0.3, guidance_scale=7.5, batch_size=1, 
+                        alpha_sample=0.3, guidance_scale=7.5, batch_size=1,
                         fix_seed=fix_seed, rand_seed=rand_seed, use_actual_mask=False, append_grounding=True,
                         style_cond_image=None, inpainting_image=inpainted_background_img, inpainting_mask=None, state=state)
 
@@ -345,7 +345,7 @@ def get_generated_full(task, language_instruction, grounding_instruction, sketch
                         use_actual_mask,
                         append_grounding, style_cond_image,
                         state):
-    
+
     out_gen_1, _, _, _, state = GLIGEN.generate(
                             task, language_instruction, grounding_instruction, sketch_pad,
                             alpha_sample, guidance_scale, batch_size,
@@ -363,7 +363,7 @@ def gligen_change_task(state):
     return task
 
 def clear_sketch_pad_mask(sketch_pad_image):
-    sketch_pad = ImageMask.update(value=sketch_pad_image, visible=True) 
+    sketch_pad = ImageMask.update(value=sketch_pad_image, visible=True)
     return sketch_pad
 
 def save_shared_state(img, state):
@@ -413,9 +413,9 @@ def copy_to_llava_input(img):
     return img
 
 title_markdown = ("""
-# <p style="text-align: center;">LLaVA Interactive</p> 
+# <p style="text-align: center;">LLaVA Interactive</p>
 """)
-                
+
 def build_demo():
     demo = gr.Blocks(title="LLaVA Interactive", css=css+GLIGEN.css)
     with demo:
@@ -444,7 +444,7 @@ def build_demo():
                 label="Task",
                 visible=False
             )
-            
+
         with gr.Row(equal_height=False):
             with gr.Column():
 
@@ -464,7 +464,7 @@ def build_demo():
                                     segment_btn = gr.Button("Segment", elem_id="segment-btn")
 
                             with gr.Group():
-                                segmented_img = gr.Image(label="Move or delete object", tool="compose", height=256) 
+                                segmented_img = gr.Image(label="Move or delete object", tool="compose", height=256)
 
                             with gr.Group():
                                 with gr.Column():
@@ -488,7 +488,7 @@ def build_demo():
 
                 gligen = gr.Tab("Generate New Image")
                 with gligen:
-                    gr.Markdown("Generate a new image by giving a language instruction below. Draw a bounding box and give an instruction for any specific objects that need to be grounded in certain places. Hit the “generate” button repeatedly until you get the image you want.")    
+                    gr.Markdown("Generate a new image by giving a language instruction below. Draw a bounding box and give an instruction for any specific objects that need to be grounded in certain places. Hit the “generate” button repeatedly until you get the image you want.")
 
                 with gr.Group(visible=False):
                     language_instruction = gr.Textbox(label="Language instruction", elem_id='language_instruction', visible=False)
@@ -525,8 +525,8 @@ def build_demo():
                 llava_image = gr.Image(label='sketch_pad_image', type='pil', visible=False, interactive=False)
                 working_image.change(copy_to_llava_input, [working_image], [llava_image])
                 sketch_pad.upload(
-                    save_shared_state, 
-                        inputs = [sketch_pad, shared_state], 
+                    save_shared_state,
+                        inputs = [sketch_pad, shared_state],
                         outputs = shared_state).then(
                     load_shared_state, [shared_state], working_image)
                 grounding_instruction.change(
@@ -561,7 +561,7 @@ def build_demo():
                     inputs=[gligen_state],
                     outputs=[sketch_pad, gligen_state],
                     queue=False)
-                        
+
                 gligen_gen_btn.click(
                     get_generated_full,
                     inputs=[
@@ -571,11 +571,11 @@ def build_demo():
                         use_actual_mask,
                         append_grounding, style_cond_image,
                         gligen_state],
-                    outputs=[sketch_pad, gligen_state], 
+                    outputs=[sketch_pad, gligen_state],
                     queue=True).then(
                     save_shared_state, [sketch_pad, shared_state], shared_state).then(
                     load_shared_state, [shared_state], working_image)
-                
+
                 sketch_pad_resize_trigger.change(
                     None,
                     None,
@@ -626,7 +626,7 @@ def build_demo():
                           save_shared_state, [sketch_pad, shared_state], shared_state).then(
                           load_shared_state, [shared_state], working_image)
         compose_clear_btn.click(load_shared_state, [shared_state], sketch_pad)
-            
+
         image_process_mode = gr.Radio(
                     ["Crop", "Resize", "Pad"],
                     value="Crop",
@@ -653,7 +653,7 @@ def build_demo():
             LLAVA.http_bot, [llava_state, model_selector, temperature, top_p, max_output_tokens],
             [llava_state, llava_chatbot] + btn_list)
         llava_clear_btn.click(LLAVA.clear_history, None, [llava_state, llava_chatbot, llava_textbox, llava_image] + btn_list)
-        
+
         llava_textbox.submit(LLAVA.add_text, [llava_state, llava_textbox, llava_image, image_process_mode], [llava_state, llava_chatbot, llava_textbox, llava_image] + btn_list
             ).then(LLAVA.http_bot, [llava_state, model_selector, temperature, top_p, max_output_tokens],
                 [llava_state, llava_chatbot] + btn_list)
@@ -665,22 +665,22 @@ def build_demo():
             raise ValueError(f"Unsupported model list mode: {args.model_list_mode}")
         elif args.model_list_mode == "reload":
             print('disable for debugging')
-            demo.load(LLAVA.load_demo_refresh_model_list, inputs=None, 
+            demo.load(LLAVA.load_demo_refresh_model_list, inputs=None,
                       outputs=[llava_state, model_selector]
                       ).then(switch_to_compose, [],  [task, out_imagebox, language_instruction, grounding_instruction, gligen_clear_btn, gligen_gen_btn, gligen_adv_options] #first tab show doesn't need any
                       ).then(GLIGEN.clear, inputs=[task, sketch_pad_trigger, batch_size, gligen_state],
                                 outputs=[sketch_pad, sketch_pad_trigger, out_imagebox, image_scale, gligen_state], queue=False)
 
         else:
-            raise ValueError(f"Unknown model list mode: {args.model_list_mode}")        
+            raise ValueError(f"Unknown model list mode: {args.model_list_mode}")
 
         gligen.select(
-                switch_to_generate, 
-                    inputs=[], 
+                switch_to_generate,
+                    inputs=[],
                     outputs=[task, out_imagebox, language_instruction, grounding_instruction, gligen_clear_btn, gligen_gen_btn, gligen_adv_options])
         gligen_inpaint.select(
-                switch_to_inpaint, 
-                    inputs=[], 
+                switch_to_inpaint,
+                    inputs=[],
                     outputs=[task, out_imagebox, language_instruction, grounding_instruction, gligen_clear_btn, gligen_gen_btn, gligen_adv_options],
                     queue=False)
 

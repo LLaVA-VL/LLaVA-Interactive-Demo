@@ -45,14 +45,14 @@ def main(predict_config: dict):
         train_config_path = os.path.join(predict_config.model.path, 'config.yaml')
         with open(train_config_path, 'r') as f:
             train_config = OmegaConf.create(yaml.safe_load(f))
-        
+
         train_config.training_model.predict_only = True
         train_config.visualizer.kind = 'noop'
 
         out_ext = predict_config.get('out_ext', '.png')
 
-        checkpoint_path = os.path.join(predict_config.model.path, 
-                                       'models', 
+        checkpoint_path = os.path.join(predict_config.model.path,
+                                       'models',
                                        predict_config.model.checkpoint)
         model = load_checkpoint(train_config, checkpoint_path, strict=False, map_location='cpu')
         model.freeze()
@@ -66,7 +66,7 @@ def main(predict_config: dict):
         for img_i in tqdm.trange(len(dataset)):
             mask_fname = dataset.mask_filenames[img_i]
             cur_out_fname = os.path.join(
-                predict_config.outdir, 
+                predict_config.outdir,
                 os.path.splitext(mask_fname[len(predict_config.indir):])[0] + out_ext
             )
             os.makedirs(os.path.dirname(cur_out_fname), exist_ok=True)
@@ -81,7 +81,7 @@ def main(predict_config: dict):
                 with torch.no_grad():
                     batch = move_to_device(batch, device)
                     batch['mask'] = (batch['mask'] > 0) * 1
-                    batch = model(batch)                    
+                    batch = model(batch)
                     cur_res = batch[predict_config.out_key][0].permute(1, 2, 0).detach().cpu().numpy()
                     unpad_to_size = batch.get('unpad_to_size', None)
                     if unpad_to_size is not None:
