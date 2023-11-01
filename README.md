@@ -5,6 +5,10 @@
 
 [[Project Page](https://llava-vl.github.io/llava-interactive/)] [[Demo](https://6dd3-20-163-117-69.ngrok-free.app/)]
 
+<p align="center">
+    <img src="images/llava_interactive_logo.png" width="50%"> <br>
+</p>
+
 # Install
 
 Installing this project requires CUDA 11.7 or above. Follow the steps below: 
