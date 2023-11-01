@@ -3,7 +3,7 @@
 
 *An All-in-One Demo for Image Chat, Segmentation and Generation/Editing.*
 
-[[Project Page](TBD)] [[Demo](TBD)]
+[[Project Page](https://llava-vl.github.io/llava-interactive/)] [[Demo](https://6dd3-20-163-117-69.ngrok-free.app/)]
 
 # Install
 
