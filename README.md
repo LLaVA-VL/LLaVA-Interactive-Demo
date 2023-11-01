@@ -40,13 +40,14 @@ To run the demo, simply run the shell script.
 # Citation
 
 If you find LLaVA-Interactive useful for your research and applications, please cite using this BibTeX:
-
+```bash
   @article{chen2023llava_interactive,
     author      = {Chen, Wei-Ge and Spiridonova, Irina and Yang, Jianwei and Gao, Jianfeng and Li, Chunyuan},
     title       = {LLaVA-Interactive: An All-in-One Demo for Image Chat, Segmentation, Generation and Editing},
     publisher   = {https://llava-vl.github.io/llava-interactive},
     year        = {2023}
   }
+```
   
 # Related Projects
 
