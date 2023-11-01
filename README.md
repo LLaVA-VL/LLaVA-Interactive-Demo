@@ -6,7 +6,7 @@
 [[Project Page](https://llava-vl.github.io/llava-interactive/)] [[Demo](https://6dd3-20-163-117-69.ngrok-free.app/)]
 
 <p align="center">
-    <img src="images/llava_interactive_logo.png" width="50%"> <br>
+    <img src="https://github.com/LLaVA-VL/llava-interactive/blob/main/images/llava_interactive_logo.png" width="50%"> <br>
 </p>
 
 # Install
