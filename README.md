@@ -3,7 +3,7 @@
 
 *An All-in-One Demo for Image Chat, Segmentation and Generation/Editing.*
 
-[[Project Page](https://llava-vl.github.io/llava-interactive/)] [[Demo](https://6dd3-20-163-117-69.ngrok-free.app/)]
+[[Project Page](https://llava-vl.github.io/llava-interactive/)] [[Demo](https://6dd3-20-163-117-69.ngrok-free.app/)] [[Paper](https://arxiv.org/abs/2311.00571)]
 
 <p align="center">
     <img src="https://github.com/LLaVA-VL/llava-interactive/blob/main/images/llava_interactive_logo.png" width="45%"> 
@@ -44,7 +44,7 @@ If you find LLaVA-Interactive useful for your research and applications, please 
   @article{chen2023llava_interactive,
     author      = {Chen, Wei-Ge and Spiridonova, Irina and Yang, Jianwei and Gao, Jianfeng and Li, Chunyuan},
     title       = {LLaVA-Interactive: An All-in-One Demo for Image Chat, Segmentation, Generation and Editing},
-    publisher   = {https://llava-vl.github.io/llava-interactive},
+    publisher   = {arXiv:2311.00571},
     year        = {2023}
   }
 ```
