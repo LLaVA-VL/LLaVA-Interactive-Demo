@@ -26,7 +26,7 @@ pip install flask
 pip install pytorch-lightning
 #download pretrained model
 git clone https://huggingface.co/smartywu/big-lama download
-unzip download/big-lama.zip
+unzip -n -q download/big-lama.zip
 
 conda deactivate
 cd ..

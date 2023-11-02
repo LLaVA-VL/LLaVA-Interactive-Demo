@@ -270,7 +270,7 @@ def get_segments (img, task, reftxt, mask_dilate_slider, state):
     if isinstance(img['mask'], np.ndarray):
         pil_mask = Image.fromarray(img['mask'])
     img = {'image': pil_image, 'mask': pil_mask}
-    img_ret, seg_info = SEEM.inference (img, task, reftxt=reftxt)
+    img_ret, seg_info = SEEM.inference(img, task, reftxt=reftxt)
     #SEEM doesn't always respect the input img dimentions
     tgt_size=(img['image'].width, img['image'].height)
     img_ret = img_ret.resize(tgt_size, resample=Image.Resampling.NEAREST)
@@ -420,9 +420,9 @@ def build_demo():
         shared_state = gr.State({'working_image': None})
         gligen_state = gr.State({'draw_box': True})
 
-        gr.Markdown('<h1 style="text-align: center;"></h1>')
-        gr.Markdown('<h1 style="text-align: center;">LLaVA Interactive</h1>')
-        gr.Markdown('<h1 style="text-align: center;"></h1>')
+        gr.HTML('<h1 style="text-align: center;"></h1>')
+        gr.HTML('<h1 style="text-align: center;">LLaVA Interactive</h1>')
+        gr.HTML('<h1 style="text-align: center;"></h1>')
 
         gr.Markdown('**Experience interactive multimodal chatting and image manipulation. Select a tab for your task and follow the instructions. Switch tasks anytime and ask questions in the chat window.**')
 
@@ -692,8 +692,7 @@ if __name__ == "__main__":
     parser.add_argument("--port", type=int)
     parser.add_argument("--controller-url", type=str, default="http://localhost:10000")
     parser.add_argument("--concurrency-count", type=int, default=8)
-    parser.add_argument("--model-list-mode", type=str, default="reload",
-        choices=["once", "reload"])
+    parser.add_argument("--model-list-mode", type=str, default="reload", choices=["once", "reload"])
     parser.add_argument("--share", action="store_true")
     parser.add_argument("--moderate", action="store_true")
     parser.add_argument("--embed", action="store_true")
@@ -702,4 +701,5 @@ if __name__ == "__main__":
 
     demo = build_demo()
     demo.queue(concurrency_count=1, api_open=False)
+
     demo.launch()

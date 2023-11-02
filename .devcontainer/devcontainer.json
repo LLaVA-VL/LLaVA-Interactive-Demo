@@ -33,6 +33,9 @@
                     "zsh": {
                         "path": "/usr/bin/zsh"
                     },
+                },
+                "[python]": {
+                    "editor.formatOnSave": true,
                 }
             },
             "extensions": [
