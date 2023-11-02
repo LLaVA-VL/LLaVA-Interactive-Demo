@@ -14,6 +14,7 @@ pip install --upgrade pip  # enable PEP 660 support
 pip install -e .
 #download pretrained model
 git clone https://huggingface.co/liuhaotian/llava-v1.5-13b
+conda deactivate
 cd ..
 
 #setting up lama
