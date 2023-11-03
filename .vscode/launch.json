@@ -1,0 +1,34 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Content Safety - Analyze Text",
+            "type": "python",
+            "request": "launch",
+            "module": "azure_content_safety",
+            "justMyCode": true,
+            "args": [
+                "analyze_text",
+                "--input_text",
+                // There is some VS Code debugger auto escaping issue that doesn't allow special characters such as ?
+                // See: https://github.com/microsoft/vscode/issues/98471, https://github.com/microsoft/vscode-python/issues/13264
+                "\"Is this text Safe\""
+            ],
+        },
+        {
+            "name": "Python: Content Safety - Analyze Image",
+            "type": "python",
+            "request": "launch",
+            "module": "azure_content_safety",
+            "justMyCode": true,
+            "args": [
+                "analyze_image",
+                "--image_url",
+                "https://raw.githubusercontent.com/Azure/azure-sdk-for-python/main/sdk/contentsafety/azure-ai-contentsafety/samples/sample_data/image.jpg"
+            ],
+        }
+    ]
+}
