@@ -597,8 +597,7 @@ def build_demo():
 
 
             with gr.Column():
-                gr.Markdown("Chat with the latest image on the left at any time by entering your text below.")
-                llava_chatbot = gr.Chatbot(elem_id="chatbot", label="LLaVA Chatbot", height=750)
+                llava_chatbot = gr.Chatbot(elem_id="chatbot", label="Chat with the latest image on the left at any time by entering your text below.", height=750)
                 with gr.Column(scale=8):
                     llava_textbox = gr.Textbox(show_label=False, placeholder="Enter text and press ENTER", container=False)
                 with gr.Column(scale=1, min_width=60):

@@ -6,6 +6,10 @@ git config --global pager.branch false
 echo "export AZCOPY_CONCURRENCY_VALUE=AUTO" >> ~/.zshrc
 echo "export AZCOPY_CONCURRENCY_VALUE=AUTO" >> ~/.bashrc
 
+# Add dotnet to PATH
+echo 'export PATH="$PATH:$HOME/.dotnet"' >> ~/.zshrc
+echo 'export PATH="$PATH:$HOME/.dotnet"' >> ~/.bashrc
+
 # Activate conda by default
 echo "source /home/vscode/miniconda3/bin/activate" >> ~/.zshrc
 echo "source /home/vscode/miniconda3/bin/activate" >> ~/.bashrc
@@ -14,10 +18,7 @@ echo "source /home/vscode/miniconda3/bin/activate" >> ~/.bashrc
 echo "conda activate llava_int" >> ~/.zshrc
 echo "conda activate llava_int" >> ~/.bashrc
 
-# Add dotnet to PATH
-echo 'export PATH="$PATH:$HOME/.dotnet"' >> ~/.bashrc
-echo 'export PATH="$PATH:$HOME/.dotnet"' >> ~/.zshrc
-
+# Activate conda on current shell
 source /home/vscode/miniconda3/bin/activate
 
 # Create and activate llava_int environment
