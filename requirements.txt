@@ -50,4 +50,5 @@ einops @ git+https://github.com/arogozhnikov/einops.git
 detectron2 @ git+https://github.com/maureenzou/detectron2-xyz.git@42121d75e10d9f858f3a91b6a39f5722c02868f0
 gradio @ git+https://github.com/wchen-github/gradio.git
 azure-ai-contentsafety==1.0.0b1
+azure-cognitiveservices-vision-contentmoderator==1.0.0
 fire==0.5.0
