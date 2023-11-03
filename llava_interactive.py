@@ -701,4 +701,4 @@ if __name__ == "__main__":
     demo = build_demo()
     demo.queue(concurrency_count=1, api_open=False)
 
-    demo.launch()
+    demo.launch(favicon_path="./demo_resources/images/llava_interactive_logo.png")

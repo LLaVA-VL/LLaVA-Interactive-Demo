@@ -31,6 +31,9 @@ ckpts*
 .ipynb_checkpoints
 *.ipynb
 
+# Demo Resources
+!demo_resources/**/*
+
 # VScode
 !.vscode/*
 
