@@ -1,5 +1,5 @@
-CONTENT_MODERATOR_ENDPOINT=$(az cognitiveservices account show -g $RESOURCE_GROUP_NAME -n $CONTENT_MODERATOR_NAME --query "properties.endpoint" -o tsv)
-CONTENT_MODERATOR_KEY=$(az cognitiveservices account keys list -g $RESOURCE_GROUP_NAME -n $CONTENT_MODERATOR_NAME --query "key1" -o tsv)
+CONTENT_MODERATOR_ENDPOINT=$(az cognitiveservices account show --subscription $EFFICIENT_AI_SUBSCRIPTION_ID -g $RESOURCE_GROUP_NAME -n $CONTENT_MODERATOR_NAME --query "properties.endpoint" -o tsv)
+CONTENT_MODERATOR_KEY=$(az cognitiveservices account keys list --subscription $EFFICIENT_AI_SUBSCRIPTION_ID -g $RESOURCE_GROUP_NAME -n $CONTENT_MODERATOR_NAME --query "key1" -o tsv)
 
 echo "CONTENT_MODERATOR_ENDPOINT: $CONTENT_MODERATOR_ENDPOINT"
 echo "CONTENT_MODERATOR_KEY: ${CONTENT_MODERATOR_KEY:0:4}..."

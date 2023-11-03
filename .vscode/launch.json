@@ -5,6 +5,30 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: Content Moderation - Screen Text",
+            "type": "python",
+            "request": "launch",
+            "module": "azure_content_moderator",
+            "justMyCode": true,
+            "args": [
+                "screen_text",
+                "--text_file_path",
+                "azure_content_moderator/text_files/email01.txt",
+            ],
+        },
+        {
+            "name": "Python: Content Moderation - Screen Image",
+            "type": "python",
+            "request": "launch",
+            "module": "azure_content_moderator",
+            "justMyCode": true,
+            "args": [
+                "screen_image",
+                "--image_url",
+                "https://moderatorsampleimages.blob.core.windows.net/samples/sample2.jpg",
+            ],
+        },
+        {
             "name": "Python: Content Safety - Analyze Text",
             "type": "python",
             "request": "launch",
