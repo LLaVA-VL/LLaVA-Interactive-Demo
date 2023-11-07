@@ -1,13 +1,11 @@
 import os
 import time
 import fire
-import logging
 
 from .guardlistWrapper import GuardlistWrapper
+from .logger import get_logger
 
-logging.basicConfig(level=os.environ.get("LOG_LEVEL", logging.INFO))
-
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def analyze_text(
@@ -48,12 +46,11 @@ def analyze_text(
     for i in range(num_requests):
         try:
             is_phrase_problematic = GuardlistWrapper.is_phrase_problematic(input_text, "en")
-            logger.info(f"Reqest: {i+1}: Is phrase: '{input_text}' problematic? {'Yes' if is_phrase_problematic else 'No'}")
+            logger.info(f"Reqest: {i+1:<2} Is phrase: '{input_text}' problematic? {'Yes' if is_phrase_problematic else 'No'}")
         except Exception as e:
             logger.error(f"Error: {e}")
 
-        if interval_seconds > 0:
-            time.sleep(interval_seconds)
+        time.sleep(interval_seconds)
 
 
 if __name__ == "__main__":
