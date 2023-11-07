@@ -14,7 +14,7 @@ def analyze_text(
     input_text: str,
     key: str = os.environ["GUARDLIST_KEY"],
     num_requests: int = 1,
-    interval_seconds: int = 0,
+    interval_seconds: float = 0,
 ):
     """Test the Guardlist API.
 
@@ -30,12 +30,13 @@ def analyze_text(
             --input_text "Is this text safe?"
         ```
 
-    2. 20 requests no delay
+    2. 20 requests 0.25 second delay
 
         ```bash
         python -m guardlist analyze_text \
             --input_text "Is this text safe?" \
-            --num_requests 100
+            --num_requests 20 \
+            --interval_seconds 0.25
         ```
     """
 
@@ -52,7 +53,7 @@ def analyze_text(
             logger.error(f"Error: {e}")
 
         if interval_seconds > 0:
-            time.sleep(float(interval_seconds))
+            time.sleep(interval_seconds)
 
 
 if __name__ == "__main__":
