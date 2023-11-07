@@ -5,6 +5,21 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: Guardlist",
+            "type": "python",
+            "request": "launch",
+            "module": "guardlist",
+            "justMyCode": true,
+            "args": [
+                "--input_text",
+                "\"Is this text safe\"",
+            ],
+            "envFile": "${workspaceFolder}/.env",
+            "env": {
+                "PYTHONNET_RUNTIME": "coreclr",
+            }
+        },
+        {
             "name": "Python: Content Moderation - Screen Text",
             "type": "python",
             "request": "launch",
