@@ -5,6 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: llava_nteractive",
+            "type": "python",
+            "request": "launch",
+            "module": "llava_interactive",
+            "justMyCode": true,
+            "env": {
+                "LLAVA_INTERACTIVE_HOME": "."
+            }
+        },
+        {
             "name": "Python: Guardlist",
             "type": "python",
             "request": "launch",
@@ -30,6 +40,7 @@
                 "--text_file_path",
                 "azure_content_moderator/text_files/email01.txt",
             ],
+            "envFile": "${workspaceFolder}/.env"
         },
         {
             "name": "Python: Content Moderation - Screen Image",
@@ -42,6 +53,7 @@
                 "--image_url",
                 "https://moderatorsampleimages.blob.core.windows.net/samples/sample2.jpg",
             ],
+            "envFile": "${workspaceFolder}/.env"
         },
         {
             "name": "Python: Content Safety - Analyze Text",
@@ -56,6 +68,7 @@
                 // See: https://github.com/microsoft/vscode/issues/98471, https://github.com/microsoft/vscode-python/issues/13264
                 "\"Is this text Safe\""
             ],
+            "envFile": "${workspaceFolder}/.env"
         },
         {
             "name": "Python: Content Safety - Analyze Image",
@@ -68,6 +81,7 @@
                 "--image_url",
                 "https://raw.githubusercontent.com/Azure/azure-sdk-for-python/main/sdk/contentsafety/azure-ai-contentsafety/samples/sample_data/image.jpg"
             ],
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
