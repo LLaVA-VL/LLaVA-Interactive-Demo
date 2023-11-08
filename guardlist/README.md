@@ -9,7 +9,13 @@
 
 ## Setup
 
-Set secret GUID for API access. Ask mattm@microsoft.com
+Get secret GUID for API access. Set in .env file if not already set.
+
+```bash
+az login
+
+GUARDLIST_KEY=$(az keyvault secret show --vault-name $KEYVAULT_RESOURCE_NAME -n $GUARDLIST_SECRET_NAME --query "value" -o tsv)
+```
 
 ## Install Guardlist python package
 
