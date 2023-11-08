@@ -35,7 +35,6 @@
                     },
                 },
                 "[python]": {
-                    "editor.formatOnSave": true,
                 }
             },
             "extensions": [
