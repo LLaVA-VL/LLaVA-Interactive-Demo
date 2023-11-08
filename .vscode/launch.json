@@ -21,6 +21,7 @@
             "module": "guardlist",
             "justMyCode": true,
             "args": [
+                "analyze_text",
                 "--input_text",
                 "\"Is this text safe\"",
             ],
