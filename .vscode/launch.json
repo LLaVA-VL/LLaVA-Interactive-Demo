@@ -5,14 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: llava_nteractive",
+            "name": "Python: llava_interactive",
             "type": "python",
             "request": "launch",
             "module": "llava_interactive",
             "justMyCode": true,
+            "args": [
+                "--moderate",
+            ],
+            "envFile": "${workspaceFolder}/.env",
             "env": {
                 "LLAVA_INTERACTIVE_HOME": "."
-            }
+            },
         },
         {
             "name": "Python: Guardlist",
