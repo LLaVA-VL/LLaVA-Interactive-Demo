@@ -12,6 +12,12 @@
             "justMyCode": true,
             "args": [
                 "--moderate",
+                "input_text_guardlist",
+                "input_text_aics",
+                "input_image_aics",
+                // "input_openai",
+                "output__text_guardlist",
+                "output__text_aics",
             ],
             "envFile": "${workspaceFolder}/.env",
             "env": {
