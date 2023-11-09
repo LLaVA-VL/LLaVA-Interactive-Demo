@@ -684,6 +684,13 @@ def build_demo():
 
     return demo
 
+
+class LowercaseAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        lowercase_values = [v.lower() for v in values]
+        setattr(namespace, self.dest, lowercase_values)
+
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
@@ -693,7 +700,7 @@ if __name__ == "__main__":
     parser.add_argument("--concurrency-count", type=int, default=8)
     parser.add_argument("--model-list-mode", type=str, default="reload", choices=["once", "reload"])
     parser.add_argument("--share", action="store_true")
-    parser.add_argument("--moderate", action="store_true")
+    parser.add_argument("--moderate", nargs="*", default=[], action=LowercaseAction)
     parser.add_argument("--embed", action="store_true")
     args = parser.parse_args()
     LLAVA.set_args(args)
