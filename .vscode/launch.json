@@ -33,8 +33,8 @@
                 "input_text_aics",
                 "input_image_aics",
                 // "input_openai",
-                "output__text_guardlist",
-                "output__text_aics",
+                "output_text_guardlist",
+                "output_text_aics",
             ],
             "envFile": "${workspaceFolder}/.env",
             "env": {
