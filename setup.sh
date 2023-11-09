@@ -1,7 +1,7 @@
 echo "Cloning dependent repos..."
-git clone --single-branch https://github.com/wchen-github/GLIGEN.git
-git clone --single-branch https://github.com/wchen-github/Segment-Everything-Everywhere-All-At-Once.git SEEM
-git clone --single-branch https://github.com/wchen-github/LLaVA
+git clone --single-branch https://github.com/mattmazzola/GLIGEN.git
+git clone --single-branch https://github.com/mattmazzola/Segment-Everything-Everywhere-All-At-Once.git SEEM
+git clone --single-branch https://github.com/mattmazzola/LLaVA
 git clone --single-branch https://github.com/advimman/lama.git
 
 echo "Creating environments and download pretrained models..."
