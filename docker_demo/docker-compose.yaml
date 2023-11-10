@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+
+  llava:
+    build:
+      context: ..
+      dockerfile: docker_demo/llava/Dockerfile
+    ports:
+      - "10000:10000"
+      - "40000:40000"
+    volumes:
+      - type: bind
+        source: ..
+        target: /opt/llava
+
+  lama:
+    build:
+      context: ..
+      dockerfile: docker_demo/lama/Dockerfile
+    volumes:
+      - type: bind
+        source: /workspaces/LLaVA-Interactive
+        target: /opt/lama
+
+  llava_interactive:
+    build:
+      context: ..
+      dockerfile: docker_demo/llava_interactive/Dockerfile
+    volumes:
+      - type: bind
+        source: ..
+        target: /opt/llava_int
