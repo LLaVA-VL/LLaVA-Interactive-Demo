@@ -14,7 +14,8 @@ RUN sudo apt install -yq \
         jq \
         jp \
         tree \
-        tldr
+        tldr \
+        ngrok
 
 # add git-lfs and install
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash && \
@@ -50,3 +51,10 @@ RUN cd /tmp && \
     ./dotnet-install.sh --channel 7.0 && \
     ./dotnet-install.sh --channel 3.1 && \
     rm ./dotnet-install.sh
+
+# Install ngrok
+RUN curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | \
+  sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null && \
+  echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | \
+  sudo tee /etc/apt/sources.list.d/ngrok.list && \
+  sudo apt update && sudo apt install ngrok

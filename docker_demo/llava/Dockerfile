@@ -26,17 +26,19 @@ RUN cd /tmp && \
     rm ./Miniconda3-latest-Linux-x86_64.sh
 
 RUN echo "source ~/miniconda3/bin/activate" >> ~/.bashrc
+
+COPY --chown=vscode LLaVA .
+
 RUN source ~/miniconda3/bin/activate && \
     conda init bash && \
     conda create -y -n llava python=3.10 && \
-    conda activate llava
-    #  && \
-    # pip install --upgrade pip && \
-    # pip install -e .
+    conda activate llava && \
+    pip install --upgrade pip && \
+    pip install -e .
 
-WORKDIR /opt/lava
+WORKDIR /opt/llava
 
 # download pretrained model
-RUN git clone https://huggingface.co/liuhaotian/llava-v1.5-13b
+# RUN git clone https://huggingface.co/liuhaotian/llava-v1.5-13b
 
-ENTRYPOINT ["bash", "start.sh"]
+ENTRYPOINT ["bash", "docker_demo/llava/start.sh"]

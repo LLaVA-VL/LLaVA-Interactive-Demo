@@ -26,13 +26,15 @@ RUN cd /tmp && \
     rm ./Miniconda3-latest-Linux-x86_64.sh
 
 RUN echo "source ~/miniconda3/bin/activate" >> ~/.bashrc
+
+COPY --chown=vscode llava/requirements.txt .
+
 RUN source ~/miniconda3/bin/activate && \
     conda create -n llava_int -c conda-forge -c pytorch python=3.10.8 pytorch=2.0.1 -y && \
     conda activate llava_int && \
     conda install -y -c nvidia cuda-compiler
 
-# Source isn't mounded so can't run install?
-# RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
 WORKDIR /opt/llava_int
 

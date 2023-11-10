@@ -26,20 +26,25 @@ RUN cd /tmp && \
     rm ./Miniconda3-latest-Linux-x86_64.sh
 
 RUN echo "source ~/miniconda3/bin/activate" >> ~/.bashrc
-RUN source ~/miniconda3/bin/activate
-    # Lama source isn't mounded so can't run install?
-#     conda env create -n lama -f conda_env.yml -y && \
-#     conda activate lama && \
-#     conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch -y
 
-# RUN pip install torch==1.10.2+cu113 --find-links https://download.pytorch.org/whl/cu113/torch_stable.html && \
-#     pip install torchvision==0.11.3+cu113 --find-links https://download.pytorch.org/whl/cu113/torch_stable.html && \
-#     pip install flask && \
-#     pip install pytorch-lightning
+COPY --chown=vscode lama/conda_env.yml .
+
+RUN source ~/miniconda3/bin/activate && \
+    conda env create -n lama -f conda_env.yml -y && \
+    conda activate lama && \
+    conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch -y && \
+    sudo rm conda_env.yml
+
+RUN source ~/miniconda3/bin/activate && \
+    conda activate lama && \
+    pip install torch==1.10.2+cu113 --find-links https://download.pytorch.org/whl/cu113/torch_stable.html && \
+    pip install torchvision==0.11.3+cu113 --find-links https://download.pytorch.org/whl/cu113/torch_stable.html && \
+    pip install flask && \
+    pip install pytorch-lightning
+
+WORKDIR /opt/lama
 
 # RUN git clone https://huggingface.co/smartywu/big-lama download && \
 #     unzip -n -q download/big-lama.zip
 
-WORKDIR /opt/lama
-
-ENTRYPOINT ["bash", "start.sh"]
+ENTRYPOINT ["bash", "docker_demo/lama/start.sh"]
