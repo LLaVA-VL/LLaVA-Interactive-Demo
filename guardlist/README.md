@@ -20,7 +20,8 @@ GUARDLIST_KEY=$(az keyvault secret show --vault-name $KEYVAULT_RESOURCE_NAME -n 
 ## Install Guardlist python package
 
 ```bash
-pip install GuardlistPython==0.4.12
+pip install artifacts-keyring
+pip install GuardlistPython==0.4.12 --index-url=https://office.pkgs.visualstudio.com/_packaging/Office/pypi/simple/
 ```
 
 > Note: This currently requires manual authentication using a browser.
