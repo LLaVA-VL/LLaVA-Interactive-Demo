@@ -1,12 +1,13 @@
 #! /bin/bash
 
-set -ex
+set -e
 
 CONTROLLER_PORT=10000
 WORKER_PORT=40000
 
 cd LLaVA
 
+source ~/miniconda3/bin/activate
 conda activate llava
 
 python -m llava.serve.controller \

@@ -27,15 +27,17 @@ RUN cd /tmp && \
 
 RUN echo "source ~/miniconda3/bin/activate" >> ~/.bashrc
 
-COPY --chown=vscode llava/requirements.txt .
+COPY --chown=vscode requirements.txt .
 
 RUN source ~/miniconda3/bin/activate && \
     conda create -n llava_int -c conda-forge -c pytorch python=3.10.8 pytorch=2.0.1 -y && \
     conda activate llava_int && \
     conda install -y -c nvidia cuda-compiler
 
-RUN pip install -r requirements.txt
+RUN source ~/miniconda3/bin/activate && \
+    conda activate llava_int && \
+    pip install -r requirements.txt
 
 WORKDIR /opt/llava_int
 
-ENTRYPOINT ["bash", "start.sh"]
+ENTRYPOINT ["bash", "docker_demo/llava_interactive/start.sh"]

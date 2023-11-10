@@ -44,6 +44,8 @@ RUN source ~/miniconda3/bin/activate && \
 
 WORKDIR /opt/lama
 
+RUN sudo chown -R vscode:vscode /opt/llava/LLaVA/
+
 # RUN git clone https://huggingface.co/smartywu/big-lama download && \
 #     unzip -n -q download/big-lama.zip
 
