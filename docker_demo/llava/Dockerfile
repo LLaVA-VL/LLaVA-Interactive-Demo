@@ -39,5 +39,4 @@ WORKDIR /opt/lava
 # download pretrained model
 RUN git clone https://huggingface.co/liuhaotian/llava-v1.5-13b
 
-ENTRYPOINT ["bash"]
-# ENTRYPOINT ["bash", "start.sh"]
+ENTRYPOINT ["bash", "start.sh"]

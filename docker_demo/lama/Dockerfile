@@ -42,5 +42,4 @@ RUN source ~/miniconda3/bin/activate
 
 WORKDIR /opt/lama
 
-ENTRYPOINT ["bash"]
-# ENTRYPOINT ["bash", "start.sh"]
+ENTRYPOINT ["bash", "start.sh"]

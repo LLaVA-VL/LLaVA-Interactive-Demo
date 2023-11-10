@@ -20,7 +20,7 @@ services:
       dockerfile: docker_demo/lama/Dockerfile
     volumes:
       - type: bind
-        source: /workspaces/LLaVA-Interactive
+        source: ..
         target: /opt/lama
 
   llava_interactive:
