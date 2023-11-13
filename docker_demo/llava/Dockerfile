@@ -1,6 +1,6 @@
 # Use the nvidia/cuda image as the base image
-FROM mcr.microsoft.com/devcontainers/base:ubuntu-20.04
-# FROM nvidia/cuda:12.2.2-cudnn8-devel-ubuntu22.04
+# FROM mcr.microsoft.com/devcontainers/base:ubuntu-20.04
+FROM nvidia/cuda:12.2.2-cudnn8-devel-ubuntu22.04
 
 SHELL [ "bash", "-c" ]
 
@@ -17,7 +17,8 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
     sudo apt-get install -yq git-lfs && \
     git lfs install
 
-USER vscode
+RUN useradd -ms /bin/bash appuser
+USER appuser
 
 # Download and install miniconda
 RUN cd /tmp && \
@@ -27,9 +28,9 @@ RUN cd /tmp && \
 
 RUN echo "source ~/miniconda3/bin/activate" >> ~/.bashrc
 
-COPY --chown=vscode LLaVA /opt/llava
-
 WORKDIR /opt/llava
+
+COPY --chown=appuser LLaVA .
 
 RUN source ~/miniconda3/bin/activate && \
     conda init bash && \

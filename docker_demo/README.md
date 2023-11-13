@@ -19,9 +19,3 @@ docker build -t llava -f ./docker_demo/llava/Dockerfile --progress=plain .
 docker run -it -v .:/opt/llava --entrypoint bash llava
 docker inspect llava
 ```
-
-```bash
-docker build -t lama -f ./docker_demo/lama/Dockerfile --progress=plain .
-docker run -it -v .:/opt/lama --entrypoint bash lama
-docker inspect lama
-```

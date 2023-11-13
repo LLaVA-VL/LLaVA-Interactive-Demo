@@ -13,6 +13,7 @@ services:
       - type: bind
         source: ..
         target: /opt/llava
+        read_only: false
 
   lama:
     build:
@@ -22,6 +23,7 @@ services:
       - type: bind
         source: ..
         target: /opt/lama
+        read_only: false
 
   llava_interactive:
     build:
@@ -31,3 +33,4 @@ services:
       - type: bind
         source: ..
         target: /opt/llava_int
+        read_only: false

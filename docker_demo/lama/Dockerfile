@@ -1,6 +1,6 @@
 # Use the nvidia/cuda image as the base image
-FROM mcr.microsoft.com/devcontainers/base:ubuntu-20.04
-# FROM nvidia/cuda:12.2.2-cudnn8-devel-ubuntu22.04
+# FROM mcr.microsoft.com/devcontainers/base:ubuntu-20.04
+FROM nvidia/cuda:12.2.2-cudnn8-devel-ubuntu22.04
 
 SHELL [ "bash", "-c" ]
 
@@ -17,8 +17,8 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
     sudo apt-get install -yq git-lfs && \
     git lfs install
 
-USER vscode
-
+RUN useradd -ms /bin/bash appuser
+USER appuser
 # Download and install miniconda
 RUN cd /tmp && \
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
@@ -27,13 +27,14 @@ RUN cd /tmp && \
 
 RUN echo "source ~/miniconda3/bin/activate" >> ~/.bashrc
 
-COPY --chown=vscode lama/conda_env.yml .
+WORKDIR /opt/lama
+
+COPY --chown=appuser lama/conda_env.yml .
 
 RUN source ~/miniconda3/bin/activate && \
     conda env create -n lama -f conda_env.yml -y && \
     conda activate lama && \
-    conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch -y && \
-    sudo rm conda_env.yml
+    conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch -y
 
 RUN source ~/miniconda3/bin/activate && \
     conda activate lama && \
@@ -41,10 +42,6 @@ RUN source ~/miniconda3/bin/activate && \
     pip install torchvision==0.11.3+cu113 --find-links https://download.pytorch.org/whl/cu113/torch_stable.html && \
     pip install flask && \
     pip install pytorch-lightning
-
-WORKDIR /opt/lama
-
-RUN sudo chown -R vscode:vscode /opt/llava/LLaVA/
 
 # RUN git clone https://huggingface.co/smartywu/big-lama download && \
 #     unzip -n -q download/big-lama.zip
