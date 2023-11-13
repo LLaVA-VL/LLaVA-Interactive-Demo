@@ -14,8 +14,7 @@ RUN sudo apt install -yq \
         jq \
         jp \
         tree \
-        tldr \
-        ngrok
+        tldr
 
 # add git-lfs and install
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash && \
