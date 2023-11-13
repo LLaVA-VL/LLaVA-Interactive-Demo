@@ -33,3 +33,6 @@ ckpts*
 
 # Dev Container
 !.devcontainer/*
+
+# Environment Variables
+.env*

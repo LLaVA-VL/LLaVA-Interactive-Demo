@@ -24,8 +24,8 @@ conda activate lama; \
 cd lama; \
 pwd; \
 export TORCH_HOME=$(pwd) && export PYTHONPATH=$(pwd); \
-python ../lama_server.py & 
-) 
+python ../lama_server.py &
+)
 
 sleep 10
 

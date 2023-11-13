@@ -1,16 +1,15 @@
-echo "Cloning dependent repos..." 
-git clone --single-branch https://github.com/wchen-github/GLIGEN.git
-git clone --single-branch https://github.com/wchen-github/Segment-Everything-Everywhere-All-At-Once.git SEEM
-git clone --single-branch https://github.com/wchen-github/LLaVA
-git clone --single-branch https://github.com/advimman/lama.git	
-
+echo "Cloning dependent repos..."
+git clone --single-branch https://github.com/mattmazzola/GLIGEN.git
+git clone --single-branch https://github.com/mattmazzola/Segment-Everything-Everywhere-All-At-Once.git SEEM
+git clone --single-branch https://github.com/mattmazzola/LLaVA
+git clone --single-branch https://github.com/advimman/lama.git
 
 echo "Creating environments and download pretrained models..."
 
 cd LLaVA
 conda create -n llava python=3.10 -y
 conda activate llava
-pip install --upgrade pip  # enable PEP 660 support
+pip install --upgrade pip # enable PEP 660 support
 pip install -e .
 #download pretrained model
 git clone https://huggingface.co/liuhaotian/llava-v1.5-13b
@@ -28,7 +27,7 @@ pip install flask
 pip install pytorch-lightning
 #download pretrained model
 git clone https://huggingface.co/smartywu/big-lama download
-unzip download/big-lama.zip
+unzip -n -q download/big-lama.zip
 
 conda deactivate
 cd ..
