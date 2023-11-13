@@ -1,10 +1,8 @@
-from flask import Flask, jsonify, send_file, request
+from flask import Flask, send_file, request
 import base64
-from PIL import Image, ImageOps
+from PIL import Image
 import io
 
-import hydra
-from omegaconf import DictConfig
 from lama_predict import main as lama_predict
 
 import os
