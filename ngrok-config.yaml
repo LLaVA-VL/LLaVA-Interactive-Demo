@@ -1,0 +1,7 @@
+version: 2
+
+tunnels:
+  llavainteractive:
+    proto: http
+    addr: 10000
+    domain: llavainteractive.ngrok.io
