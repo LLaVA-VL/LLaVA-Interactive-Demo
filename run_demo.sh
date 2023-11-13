@@ -35,4 +35,3 @@ conda activate llava_int; \
 export LLAVA_INTERACTIVE_HOME=.; \
 python llava_interactive.py
 )
-
