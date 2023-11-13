@@ -15,9 +15,13 @@ Get secret GUID for API access. Set in .env file if not already set.
 az login
 
 GUARDLIST_KEY=$(az keyvault secret show --vault-name $KEYVAULT_RESOURCE_NAME -n $GUARDLIST_SECRET_NAME --query "value" -o tsv)
+echo "${GUARDLIST_KEY:0:5}..."
+export GUARDLIST_KEY=$GUARDLIST_KEY
 ```
 
 ## Install Guardlist python package
+
+> Note: You must install in llava conda environment, may also install in llava_int environment for testing
 
 ```bash
 pip install artifacts-keyring
@@ -48,6 +52,6 @@ Collecting GuardlistPython==0.4.12
 ## Run
 
 ```bash
-python -m guardlist \
+python -m guardlist analyze_text \
   --input_text "Is this text safe?"
 ```
