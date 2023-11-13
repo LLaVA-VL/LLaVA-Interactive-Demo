@@ -31,6 +31,12 @@ ckpts*
 .ipynb_checkpoints
 *.ipynb
 
+# Github
+!.github/*
+
+# VScode
+!.vscode/*
+
 # Dev Container
 !.devcontainer/*
 

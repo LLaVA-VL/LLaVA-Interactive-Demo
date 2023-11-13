@@ -1,0 +1,29 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: llava_interactive",
+            "type": "python",
+            "request": "launch",
+            "module": "llava_interactive",
+            "justMyCode": true,
+            "args": [
+                "--moderate",
+                "input_text_guardlist",
+                "input_text_aics",
+                "input_image_aics",
+                // "input_openai",
+                "output_text_guardlist",
+                "output_text_aics",
+            ],
+            "envFile": "${workspaceFolder}/.env",
+            "env": {
+                "LLAVA_INTERACTIVE_HOME": ".",
+                "LOGLEVEL": "DEBUG",
+            },
+        },
+    ]
+}
