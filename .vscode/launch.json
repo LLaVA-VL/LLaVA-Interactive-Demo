@@ -5,23 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: args_tester",
-            "type": "python",
-            "request": "launch",
-            "module": "args_test",
-            "justMyCode": true,
-            "args": [
-                "--moderate",
-                "input_text_AICs",
-                // "input_openai",
-                "oUTput_text_guardlist",
-                "output_text_aics",
-            ],
-            "envFile": "${workspaceFolder}/.env",
-            "env": {
-            },
-        },
-        {
             "name": "Python: llava_interactive",
             "type": "python",
             "request": "launch",
@@ -40,6 +23,23 @@
             "env": {
                 "LLAVA_INTERACTIVE_HOME": ".",
                 "LOGLEVEL": "DEBUG",
+            },
+        },
+        {
+            "name": "Python: args_tester",
+            "type": "python",
+            "request": "launch",
+            "module": "args_test",
+            "justMyCode": true,
+            "args": [
+                "--moderate",
+                "input_text_AICs",
+                // "input_openai",
+                "oUTput_text_guardlist",
+                "output_text_aics",
+            ],
+            "envFile": "${workspaceFolder}/.env",
+            "env": {
             },
         },
         {

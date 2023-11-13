@@ -43,7 +43,7 @@ def echo_image():
     os.makedirs("web_server_input")
   image.save("web_server_input/server.png")
 
-  base64_mask_data = json_dict["mask"]  
+  base64_mask_data = json_dict["mask"]
   image_bytes = base64.b64decode(base64_mask_data)
   image_stream = io.BytesIO(image_bytes)
   mask = Image.open(image_stream)
@@ -62,7 +62,7 @@ def echo_image():
   transparent = Image.new(image.mode, image.size, (0, 0, 0, 0))
   # Composite the image and the transparent image using the mask
   masked_image = Image.composite(image, transparent, mask)
-  masked_image.save("server_masked_image.png")  
+  masked_image.save("server_masked_image.png")
 
   # Convert the masked image to bytes and create a new stream
   masked_image_stream = io.BytesIO()
@@ -72,9 +72,9 @@ def echo_image():
   lama_predict(config)
 
   with open("web_server_output/server_mask.png", "rb") as image_file:
-    image_bytes = image_file.read() 
+    image_bytes = image_file.read()
     image_inpainted_stream = io.BytesIO(image_bytes)
-    print(image.format_description)  
+    print(image.format_description)
   image_inpainted_stream.seek(0)
 
   return send_file(image_inpainted_stream, mimetype="image/png")

@@ -31,8 +31,8 @@ ckpts*
 .ipynb_checkpoints
 *.ipynb
 
-# Demo Resources
-!demo_resources/**/*
+# Github
+!.github/*
 
 # VScode
 !.vscode/*
@@ -42,3 +42,6 @@ ckpts*
 
 # Environment Variables
 .env*
+
+# Demo Resources
+!demo_resources/**/*
