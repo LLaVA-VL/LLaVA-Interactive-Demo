@@ -13,6 +13,7 @@ import traceback
 
 from saicinpainting.evaluation.utils import move_to_device
 from saicinpainting.evaluation.refinement import refine_predict
+
 os.environ['OMP_NUM_THREADS'] = '1'
 os.environ['OPENBLAS_NUM_THREADS'] = '1'
 os.environ['MKL_NUM_THREADS'] = '1'
@@ -35,10 +36,10 @@ from saicinpainting.utils import register_debug_signal_handlers
 LOGGER = logging.getLogger(__name__)
 
 
-#@hydra.main(config_path='../configs/prediction', config_name='web_server.yaml')
+# @hydra.main(config_path='../configs/prediction', config_name='web_server.yaml')
 def main(predict_config: dict):
     try:
-        #register_debug_signal_handlers()  # kill -10 <pid> will result in traceback dumped into log
+        # register_debug_signal_handlers()  # kill -10 <pid> will result in traceback dumped into log
 
         device = torch.device(predict_config.device)
 
@@ -51,9 +52,7 @@ def main(predict_config: dict):
 
         out_ext = predict_config.get('out_ext', '.png')
 
-        checkpoint_path = os.path.join(predict_config.model.path,
-                                       'models',
-                                       predict_config.model.checkpoint)
+        checkpoint_path = os.path.join(predict_config.model.path, 'models', predict_config.model.checkpoint)
         model = load_checkpoint(train_config, checkpoint_path, strict=False, map_location='cpu')
         model.freeze()
         if not predict_config.get('refine', False):
@@ -66,8 +65,7 @@ def main(predict_config: dict):
         for img_i in tqdm.trange(len(dataset)):
             mask_fname = dataset.mask_filenames[img_i]
             cur_out_fname = os.path.join(
-                predict_config.outdir,
-                os.path.splitext(mask_fname[len(predict_config.indir):])[0] + out_ext
+                predict_config.outdir, os.path.splitext(mask_fname[len(predict_config.indir) :])[0] + out_ext
             )
             os.makedirs(os.path.dirname(cur_out_fname), exist_ok=True)
             batch = default_collate([dataset[img_i]])
@@ -76,7 +74,7 @@ def main(predict_config: dict):
                 # image unpadding is taken care of in the refiner, so that output image
                 # is same size as the input image
                 cur_res = refine_predict(batch, model, **predict_config.refiner)
-                cur_res = cur_res[0].permute(1,2,0).detach().cpu().numpy()
+                cur_res = cur_res[0].permute(1, 2, 0).detach().cpu().numpy()
             else:
                 with torch.no_grad():
                     batch = move_to_device(batch, device)
@@ -99,5 +97,5 @@ def main(predict_config: dict):
         sys.exit(1)
 
 
-#if __name__ == '__main__':
+# if __name__ == '__main__':
 #    main()
