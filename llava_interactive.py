@@ -19,6 +19,12 @@ import SEEM.demo_code.app as SEEM  # must import GLIGEN_app before this. Otherwi
 
 sys.path.append(os.path.join(os.environ['LLAVA_INTERACTIVE_HOME'], 'LLaVA'))
 import LLaVA.llava.serve.gradio_web_server as LLAVA
+from LLaVA.llava.utils import (
+    ModerationOptions,
+    does_image_violate_azure_content_safety,
+    does_text_violate_azure_content_safety,
+    violates_guardlist_moderation,
+)
 
 
 class ImageMask(gr.components.Image):
@@ -341,6 +347,23 @@ def get_generated(grounding_text, fix_seed, rand_seed, state):
     if len(grounding_text) == 0:  # mostly user forgot to drag the object and didn't provide grounding text
         raise gr.Error('Please providing grounding text to match the identified object')
 
+    if len(args.moderate) > 0:
+        does_text_violate_policy = False
+
+        if not does_text_violate_policy and (
+            ModerationOptions.ALL.value in args.moderate
+            or ModerationOptions.GLIGEN_INPUT_TEXT_GUARDLIST.value in args.moderate
+        ):
+            does_text_violate_policy |= violates_guardlist_moderation(grounding_text)
+        if not does_text_violate_policy and (
+            ModerationOptions.ALL.value in args.moderate
+            or ModerationOptions.GLIGEN_INPUT_TEXT_AICS.value in args.moderate
+        ):
+            does_text_violate_policy |= does_text_violate_azure_content_safety(grounding_text)
+
+        if does_text_violate_policy:
+            return inpainted_background_img.copy(), state
+
     out_gen_1, _, _, _, state = GLIGEN.generate(
         task='Grounded Inpainting',
         language_instruction='',
@@ -359,7 +382,21 @@ def get_generated(grounding_text, fix_seed, rand_seed, state):
         state=state,
     )
 
-    return out_gen_1['value'], state
+    image = out_gen_1['value']
+
+    if len(args.moderate) > 0:
+        does_image_violate_policy = False
+
+        if not does_image_violate_policy and (
+            ModerationOptions.ALL.value in args.moderate
+            or ModerationOptions.GLIGEN_OUTPUT_IMAGE_AICS.value in args.moderate
+        ):
+            does_image_violate_policy |= does_image_violate_azure_content_safety(image)
+
+        if does_image_violate_policy:
+            return inpainted_background_img.copy(), state
+
+    return image, state
 
 
 def get_generated_full(
