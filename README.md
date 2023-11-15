@@ -36,6 +36,11 @@ To run the demo, simply run the shell script.
     <br>
 </p>
 
+# Serve the demo
+
+```bash
+ngrok http 7860 --config ./ngrok.yaml,/home/vscode/.config/ngrok/ngrok.yml
+```
 
 # Citation
 
