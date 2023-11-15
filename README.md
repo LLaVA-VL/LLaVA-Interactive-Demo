@@ -39,7 +39,14 @@ To run the demo, simply run the shell script.
 # Serve the demo
 
 ```bash
-ngrok http 7860 --config ./ngrok.yaml,/home/vscode/.config/ngrok/ngrok.yml
+az login
+
+NGROK_AUTHTOKEN=$(az keyvault secret show --vault-name $KEYVAULT_RESOURCE_NAME -n $NGROK_SECRET_NAME --query "value" -o tsv)
+echo "${NGROK_AUTHTOKEN:0:5}..."
+
+ngrok config add-authtoken $NGROK_AUTHTOKEN
+
+ngrok start llavainteractive --config ./ngrok.yml,/home/vscode/.config/ngrok/ngrok.yml
 ```
 
 # Citation
