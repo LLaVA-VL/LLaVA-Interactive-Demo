@@ -7,6 +7,16 @@ pkill -9 -f llava_interactive
 
 eval "$(conda shell.bash hook)"
 
+# Test for environment variables
+if [ -z "$GUARDLIST_KEY" ]; then
+  echo "❗GUARDLIST_KEY environment variable must be set!"
+  exit 1
+fi
+
+if [ -z "$CONTENT_SAFETY_KEY" ]; then
+  echo "❗ CONTENT_SAFETY_KEY environment variable must be set!"
+  exit 1
+fi
 (
 conda deactivate; \
 cd LLaVA; \
