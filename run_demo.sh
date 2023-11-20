@@ -48,11 +48,12 @@ python -m llava.serve.model_worker \
 sleep 30
 
 (
-conda deactivate; \
-conda activate lama; \
 cd lama; \
 pwd; \
-export TORCH_HOME=$(pwd) && export PYTHONPATH=$(pwd); \
+conda deactivate; \
+conda activate lama; \
+export TORCH_HOME=$(pwd); \
+export PYTHONPATH=$(pwd); \
 python ../lama_server.py &
 )
 
