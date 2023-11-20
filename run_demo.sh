@@ -7,6 +7,15 @@ pkill -9 -f llava_interactive
 
 eval "$(conda shell.bash hook)"
 
+# Check if --debug is in the command line arguments
+if [[ " $* " == *" --debug "* ]]; then
+  RUN_LLAVA_INT=False
+else
+  RUN_LLAVA_INT=True
+fi
+
+echo "RUN_LLAVA_INT: $RUN_LLAVA_INT"
+
 # Test for environment variables
 if [ -z "$GUARDLIST_KEY" ]; then
   echo "❗GUARDLIST_KEY environment variable must be set!"
