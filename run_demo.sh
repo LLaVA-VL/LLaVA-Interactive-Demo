@@ -58,18 +58,23 @@ python ../lama_server.py &
 
 sleep 10
 
-(
-conda deactivate; \
-conda activate llava_int; \
-export LLAVA_INTERACTIVE_HOME=.; \
-python llava_interactive.py \
-  --moderate \
-  input_text_guardlist \
-  input_text_aics \
-  input_image_aics \
-  output_text_guardlist \
-  output_text_aics \
-  gligen_input_text_guardlist \
-  gligen_input_text_aics \
-  gligen_output_image_aics
-)
+if [ "$RUN_LLAVA_INT" = "True" ]; then
+  (
+  pwd; \
+  conda deactivate; \
+  conda activate llava_int; \
+  export LLAVA_INTERACTIVE_HOME=.; \
+  python llava_interactive.py \
+    --moderate \
+    input_text_guardlist \
+    input_text_aics \
+    input_image_aics \
+    output_text_guardlist \
+    output_text_aics \
+    gligen_input_text_guardlist \
+    gligen_input_text_aics \
+    gligen_output_image_aics
+  )
+else
+  echo "Skipping llava_interactive.py because --debug was given."
+fi
