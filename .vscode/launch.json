@@ -25,7 +25,7 @@
             "envFile": "${workspaceFolder}/.env",
             "env": {
                 "LLAVA_INTERACTIVE_HOME": ".",
-                "LOGLEVEL": "INFO",
+                "LOGLEVEL": "DEBUG",
             },
         },
         {
