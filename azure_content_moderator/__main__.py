@@ -1,15 +1,13 @@
 import json
 import os
-from pathlib import Path
 import time
+from pathlib import Path
 
 import fire
-from azure.cognitiveservices.vision.contentmoderator import \
-    ContentModeratorClient
-from azure.cognitiveservices.vision.contentmoderator.models import (Evaluate,
-                                                                    Screen)
+from azure.cognitiveservices.vision.contentmoderator import ContentModeratorClient
+from azure.cognitiveservices.vision.contentmoderator.models import Evaluate, Screen
 from msrest.authentication import CognitiveServicesCredentials
-from rich import print
+
 from .logger import get_logger
 
 logger = get_logger(__name__)
@@ -36,20 +34,13 @@ def screen_text(
         ```
     """
 
-    client = ContentModeratorClient(
-        endpoint=endpoint,
-        credentials=CognitiveServicesCredentials(key)
-    )
+    client = ContentModeratorClient(endpoint=endpoint, credentials=CognitiveServicesCredentials(key))
 
     logger.info(f'Text Moderation: {text_file_path}')
     with open(text_file_path, "rb") as text_fd:
         for i in range(num_requests):
             screen = client.text_moderation.screen_text(
-                text_content_type="text/plain",
-                text_content=text_fd,
-                language="eng",
-                autocorrect=True,
-                pii=True
+                text_content_type="text/plain", text_content=text_fd, language="eng", autocorrect=True, pii=True
             )
             assert isinstance(screen, Screen)
             logger.info(f'Reqest: {i+1:<2} Text Moderation: Screen Text Response')
@@ -79,19 +70,13 @@ def screen_image(
         ```
     """
 
-    client = ContentModeratorClient(
-        endpoint=endpoint,
-        credentials=CognitiveServicesCredentials(key)
-    )
+    client = ContentModeratorClient(endpoint=endpoint, credentials=CognitiveServicesCredentials(key))
 
     for i in range(num_requests):
         logger.info(f"Request: {i+1:<2} Evaluate image {image_url}")
 
         evaluation = client.image_moderation.evaluate_url_input(
-            content_type="application/json",
-            cache_image=True,
-            data_representation="URL",
-            value=image_url
+            content_type="application/json", cache_image=True, data_representation="URL", value=image_url
         )
         assert isinstance(evaluation, Evaluate)
 

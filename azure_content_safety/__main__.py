@@ -1,17 +1,24 @@
+import base64
 import os
 import time
+
 import fire
 import requests
-import base64
-
 from azure.ai.contentsafety import ContentSafetyClient
+from azure.ai.contentsafety.models import (
+    AnalyzeImageOptions,
+    AnalyzeImageResult,
+    AnalyzeTextOptions,
+    AnalyzeTextResult,
+    ImageData,
+)
 from azure.core.credentials import AzureKeyCredential
 from azure.core.exceptions import HttpResponseError
-from azure.ai.contentsafety.models import AnalyzeTextOptions, AnalyzeTextResult, AnalyzeImageOptions, AnalyzeImageResult, ImageData
 
 from .logger import get_logger
 
 logger = get_logger(__name__, logger_blocklist=["azure", "azure.core", "azure.ai"])
+
 
 def analyze_text(
     input_text: str,

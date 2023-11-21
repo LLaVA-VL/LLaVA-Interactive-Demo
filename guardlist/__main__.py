@@ -1,5 +1,6 @@
 import os
 import time
+
 import fire
 
 from .guardlistWrapper import GuardlistWrapper
@@ -46,7 +47,9 @@ def analyze_text(
     for i in range(num_requests):
         try:
             is_phrase_problematic = GuardlistWrapper.is_phrase_problematic(input_text, "en")
-            logger.info(f"Reqest: {i+1:<2} Is phrase: '{input_text}' problematic? {'Yes' if is_phrase_problematic else 'No'}")
+            logger.info(
+                f"Reqest: {i+1:<2} Is phrase: '{input_text}' problematic? {'Yes' if is_phrase_problematic else 'No'}"
+            )
         except Exception as e:
             logger.error(f"Error: {e}")
 
