@@ -1,6 +1,5 @@
-# Use the nvidia/cuda image as the base image
 # FROM mcr.microsoft.com/devcontainers/base:ubuntu-20.04
-FROM nvidia/cuda:12.2.2-cudnn8-devel-ubuntu22.04
+FROM nvidia/cuda:12.2.2-cudnn8-devel-ubuntu20.04
 
 SHELL [ "bash", "-c" ]
 
@@ -17,14 +16,15 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
     sudo apt-get install -yq git-lfs && \
     git lfs install
 
-# Create the group with ID '500000513'
-RUN groupadd -g 500000513 appgroup
+############################################
+# Setup user
+############################################
 
-# Add the user 'appuser' with the specified user ID and group ID
-RUN useradd -u 516398317 -g 500000513 -ms /bin/bash appuser
+# Create user to mimic user from devcontainer image to inherit file permissions from mounted volume
+RUN groupadd -g 500000513 appgroup && \
+    useradd -u 516398317 -g 500000513 -ms /bin/bash vscode
 
-USER appuser
-# USER vscode
+USER vscode
 
 # Download and install miniconda
 RUN cd /tmp && \
@@ -32,12 +32,21 @@ RUN cd /tmp && \
     bash ./Miniconda3-latest-Linux-x86_64.sh -b && \
     rm ./Miniconda3-latest-Linux-x86_64.sh
 
-RUN echo "source ~/miniconda3/bin/activate" >> ~/.bashrc
+# Install dotnet
+RUN cd /tmp && \
+    wget https://dot.net/v1/dotnet-install.sh && \
+    chmod +x dotnet-install.sh && \
+    ./dotnet-install.sh --channel 7.0 && \
+    ./dotnet-install.sh --channel 3.1 && \
+    rm ./dotnet-install.sh
+
+RUN echo 'export PATH="$PATH:$HOME/.dotnet"' >> ~/.bashrc
 
 WORKDIR /opt/llava
 
-COPY --chown=appuser LLaVA .
-# COPY --chown=vscode LLaVA .
+COPY --chown=vscode LLaVA .
+
+RUN echo "source ~/miniconda3/bin/activate" >> ~/.bashrc
 
 RUN source ~/miniconda3/bin/activate && \
     conda init bash && \
