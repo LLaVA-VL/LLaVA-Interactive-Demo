@@ -7,4 +7,4 @@ conda activate llava_int
 
 export LLAVA_INTERACTIVE_HOME=.
 
-python llava_interactive.py
+python llava_interactive.py --controller-url http://localhost:10001

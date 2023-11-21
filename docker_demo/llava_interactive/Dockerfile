@@ -17,8 +17,15 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
     sudo apt-get install -yq git-lfs && \
     git lfs install
 
-RUN useradd -ms /bin/bash appuser
+# Create the group with ID '500000513'
+RUN groupadd -g 500000513 appgroup
+
+# Add the user 'appuser' with the specified user ID and group ID
+RUN useradd -u 516398317 -g 500000513 -ms /bin/bash appuser
+
 USER appuser
+# USER vscode
+
 # Download and install miniconda
 RUN cd /tmp && \
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
@@ -30,6 +37,7 @@ RUN echo "source ~/miniconda3/bin/activate" >> ~/.bashrc
 WORKDIR /opt/llava_int
 
 COPY --chown=appuser requirements.txt .
+# COPY --chown=vscode requirements.txt .
 
 RUN source ~/miniconda3/bin/activate && \
     conda create -n llava_int -c conda-forge -c pytorch python=3.10.8 pytorch=2.0.1 -y && \

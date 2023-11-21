@@ -17,8 +17,14 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
     sudo apt-get install -yq git-lfs && \
     git lfs install
 
-RUN useradd -ms /bin/bash appuser
+# Create the group with ID '500000513'
+RUN groupadd -g 500000513 appgroup
+
+# Add the user 'appuser' with the specified user ID and group ID
+RUN useradd -u 516398317 -g 500000513 -ms /bin/bash appuser
+
 USER appuser
+# USER vscode
 
 # Download and install miniconda
 RUN cd /tmp && \
@@ -31,6 +37,7 @@ RUN echo "source ~/miniconda3/bin/activate" >> ~/.bashrc
 WORKDIR /opt/llava
 
 COPY --chown=appuser LLaVA .
+# COPY --chown=vscode LLaVA .
 
 RUN source ~/miniconda3/bin/activate && \
     conda init bash && \

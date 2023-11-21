@@ -7,13 +7,20 @@ services:
       context: ..
       dockerfile: docker_demo/llava/Dockerfile
     ports:
-      - "10000:10000"
-      - "40000:40000"
+      - "10001:10000"
+      - "40001:40000"
     volumes:
       - type: bind
         source: ..
         target: /opt/llava
         read_only: false
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #       - driver: nvidia
+    #         count: 1
+    #         capabilities: [gpu]
 
   lama:
     build:
@@ -24,6 +31,13 @@ services:
         source: ..
         target: /opt/lama
         read_only: false
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #       - driver: nvidia
+    #         count: 1
+    #         capabilities: [gpu]
 
   llava_interactive:
     build:
@@ -34,3 +48,10 @@ services:
         source: ..
         target: /opt/llava_int
         read_only: false
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #       - driver: nvidia
+    #         count: 1
+    #         capabilities: [gpu]
