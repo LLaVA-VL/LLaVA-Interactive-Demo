@@ -22,7 +22,7 @@ docker build -t llava \
 docker run -it \
   -p 10001:10000 \
   -p 40001:40000 \
-  -v .:/opt/llava:rw \
+  -v .:/opt/app:rw \
   --gpus all \
   --name llava \
   --entrypoint bash llava

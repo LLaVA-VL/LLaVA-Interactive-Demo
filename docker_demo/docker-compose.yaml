@@ -13,7 +13,7 @@ services:
     volumes:
       - type: bind
         source: ..
-        target: /opt/llava
+        target: /opt/app
         read_only: false
     deploy:
       resources:
@@ -30,7 +30,7 @@ services:
     volumes:
       - type: bind
         source: ..
-        target: /opt/lama
+        target: /opt/app
         read_only: false
     deploy:
       resources:
@@ -48,7 +48,7 @@ services:
     volumes:
       - type: bind
         source: ..
-        target: /opt/llava_int
+        target: /opt/app
         read_only: false
     deploy:
       resources:

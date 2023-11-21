@@ -46,7 +46,7 @@ RUN cd /tmp && \
 
 RUN echo 'export PATH="$PATH:$HOME/.dotnet"' >> ~/.bashrc
 
-WORKDIR /opt/llava_int
+WORKDIR /opt/app
 
 COPY --chown=vscode requirements.txt .
 

@@ -46,7 +46,7 @@ RUN cd /tmp && \
 
 RUN echo 'export PATH="$PATH:$HOME/.dotnet"' >> ~/.bashrc
 
-WORKDIR /opt/lama
+WORKDIR /opt/app
 
 COPY --chown=vscode lama/conda_env.yml .
 
