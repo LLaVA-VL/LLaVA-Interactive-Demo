@@ -6,6 +6,7 @@ diffusers==0.11.1
 diffdist==0.1
 ftfy==6.1.1
 fvcore==0.1.5.post20221221
+httpx==0.25.1
 imageio==2.9.0
 imageio-ffmpeg==0.4.2
 invisible-watermark==0.1.5
