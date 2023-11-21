@@ -3,6 +3,8 @@ FROM nvidia/cuda:12.2.2-cudnn8-devel-ubuntu20.04
 
 SHELL [ "bash", "-c" ]
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 # update apt and install packages
 RUN apt update && \
     apt install -yq \
@@ -20,6 +22,7 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
 # Setup user
 ############################################
 
+# Create user to mimic user from devcontainer image to inherit file permissions from mounted volume
 RUN groupadd -g 500000513 appgroup && \
     useradd -u 516398317 -g 500000513 -ms /bin/bash vscode
 
@@ -33,12 +36,23 @@ RUN cd /tmp && \
 
 RUN echo "source ~/miniconda3/bin/activate" >> ~/.bashrc
 
+# Install dotnet
+RUN cd /tmp && \
+    wget https://dot.net/v1/dotnet-install.sh && \
+    chmod +x dotnet-install.sh && \
+    ./dotnet-install.sh --channel 7.0 && \
+    ./dotnet-install.sh --channel 3.1 && \
+    rm ./dotnet-install.sh
+
+RUN echo 'export PATH="$PATH:$HOME/.dotnet"' >> ~/.bashrc
+
 WORKDIR /opt/llava_int
 
 COPY --chown=vscode requirements.txt .
 
 RUN source ~/miniconda3/bin/activate && \
-    conda create -n llava_int -c conda-forge -c pytorch python=3.10.8 pytorch=2.0.1 -y && \
+    # conda init bash && \
+    conda create -y -n llava_int -c conda-forge -c pytorch python=3.10.8 pytorch=2.0.1 && \
     conda activate llava_int && \
     conda install -y -c nvidia cuda-compiler
 

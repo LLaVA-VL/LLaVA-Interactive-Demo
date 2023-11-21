@@ -20,11 +20,29 @@ docker build -t llava \
   .
 
 docker run -it \
-  -v .:/opt/llava \
+  -p 10001:10000 \
+  -p 40001:40000 \
+  -v .:/opt/llava:rw \
   --gpus all \
+  --name llava \
   --entrypoint bash llava
+```
 
-docker inspect llava
+```bash
+source ~/miniconda3/bin/activate
+conda activate llava
+
+source .env.export
+export PYTHONNET_RUNTIME=coreclr
+
+pip install artifacts-keyring
+pip install GuardlistPython==0.4.12 --index-url=https://office.pkgs.visualstudio.com/_packaging/Office/pypi/simple/
+
+bash docker_demo/llava/start.sh
+```
+
+```bash
+docker exec -it 4afbed1fce /bin/bash
 ```
 
 ## Test Docker Nvidia GPUs

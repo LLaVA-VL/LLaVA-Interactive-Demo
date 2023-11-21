@@ -3,6 +3,8 @@ FROM nvidia/cuda:12.2.2-cudnn8-devel-ubuntu20.04
 
 SHELL [ "bash", "-c" ]
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 # update apt and install packages
 RUN apt update && \
     apt install -yq \
@@ -32,6 +34,8 @@ RUN cd /tmp && \
     bash ./Miniconda3-latest-Linux-x86_64.sh -b && \
     rm ./Miniconda3-latest-Linux-x86_64.sh
 
+RUN echo "source ~/miniconda3/bin/activate" >> ~/.bashrc
+
 # Install dotnet
 RUN cd /tmp && \
     wget https://dot.net/v1/dotnet-install.sh && \
@@ -46,10 +50,8 @@ WORKDIR /opt/llava
 
 COPY --chown=vscode LLaVA .
 
-RUN echo "source ~/miniconda3/bin/activate" >> ~/.bashrc
-
 RUN source ~/miniconda3/bin/activate && \
-    conda init bash && \
+    # conda init bash && \
     conda create -y -n llava python=3.10 && \
     conda activate llava
 
