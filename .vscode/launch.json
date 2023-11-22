@@ -26,6 +26,7 @@
             "env": {
                 "LLAVA_INTERACTIVE_HOME": ".",
                 "LOGLEVEL": "DEBUG",
+                "CUDA_VISIBLE_DEVICES": "2,3",
             },
         },
         {
@@ -101,6 +102,16 @@
                 "\"Is this text Safe\""
             ],
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "name": "Python: Content Safety Tests - Analyze Text",
+            "type": "python",
+            "request": "launch",
+            "module": "azure_content_safety.tests",
+            "justMyCode": true,
+            "args": [
+                "-v",
+            ],
         },
         {
             "name": "Python: Content Safety - Analyze Text for Jailbreak",

@@ -20,3 +20,9 @@ python -m azure_content_safety analyze_text \
 python -m azure_content_safety analyze_image \
     --image_url "https://raw.githubusercontent.com/Azure/azure-sdk-for-python/main/sdk/contentsafety/azure-ai-contentsafety/samples/sample_data/image.jpg"
 ```
+
+## Running Tests
+
+```bash
+python -m unittest azure_content_safety/tests.py -v
+```

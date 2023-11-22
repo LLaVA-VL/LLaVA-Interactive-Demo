@@ -24,8 +24,6 @@ logger = get_logger(__name__, logger_blocklist=["azure", "azure.core", "azure.ai
 
 def analyze_text(
     input_text: str,
-    endpoint: str = os.environ["CONTENT_SAFETY_ENDPOINT"],
-    key: str = os.environ["CONTENT_SAFETY_KEY"],
     num_requests: int = 1,
     interval_seconds: float = 0,
 ):
@@ -52,13 +50,10 @@ def analyze_text(
 
     assert input_text, "Input text cannot be empty."
 
-    client = ContentSafetyClient(endpoint, AzureKeyCredential(key))
-
     for i in range(num_requests):
         try:
             logger.info(f'Request: {i+1:<2} Analyze Text: {input_text}')
-            request = AnalyzeTextOptions(text=input_text)
-            response = client.analyze_text(request)
+            response = _analyze_text(input_text)
 
             _print_result(response)
         except HttpResponseError as e:
@@ -72,6 +67,24 @@ def analyze_text(
             raise
 
         time.sleep(interval_seconds)
+
+
+client: ContentSafetyClient = None
+
+
+def _analyze_text(
+    input_text: str,
+    endpoint: str = os.environ["CONTENT_SAFETY_ENDPOINT"],
+    key: str = os.environ["CONTENT_SAFETY_KEY"],
+):
+    global client
+    if client is None:
+        client = ContentSafetyClient(endpoint, AzureKeyCredential(key))
+
+    request = AnalyzeTextOptions(text=input_text)
+    response = client.analyze_text(request)
+
+    return response
 
 
 def analyze_text_for_jailbreak(
