@@ -9,7 +9,7 @@ docker compose -f docker_demo/docker-compose.yaml up --build
 ## Inspect Containers
 
 ```bash
-docker run --rm -it --entrypoint bash docker_demo-llava
+docker compose -f docker_demo/docker-compose.yaml exec llava_interactive bash
 ```
 
 ## Manually build single container
@@ -23,9 +23,8 @@ docker run -it \
   -p 10001:10000 \
   -p 40001:40000 \
   -v .:/opt/app:rw \
-  --gpus all \
-  --name llava \
-  --entrypoint bash llava
+  --gpus '"device=2,3"' \
+  --name llava llava
 ```
 
 ```bash

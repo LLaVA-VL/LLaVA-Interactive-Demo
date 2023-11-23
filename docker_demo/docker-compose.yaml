@@ -6,7 +6,7 @@ services:
     build:
       context: ..
       dockerfile: docker_demo/llava/Dockerfile
-    entrypoint: /bin/bash
+    # entrypoint: /bin/bash
     ports:
       - "10001:10000"
       - "40001:40000"
@@ -20,8 +20,8 @@ services:
         reservations:
           devices:
           - driver: nvidia
-            count: all
             capabilities: [gpu]
+            device_ids: ["2", "3"]
 
   lama:
     build:
@@ -32,28 +32,32 @@ services:
         source: ..
         target: /opt/app
         read_only: false
+    ports:
+      - "9172:9171"
     deploy:
       resources:
         reservations:
           devices:
           - driver: nvidia
-            count: all
             capabilities: [gpu]
+            device_ids: ["2", "3"]
 
   llava_interactive:
     build:
       context: ..
       dockerfile: docker_demo/llava_interactive/Dockerfile
-    entrypoint: /bin/bash
+    # entrypoint: /bin/bash
     volumes:
       - type: bind
         source: ..
         target: /opt/app
         read_only: false
+    ports:
+      - "7861:7860"
     deploy:
       resources:
         reservations:
           devices:
           - driver: nvidia
-            count: all
             capabilities: [gpu]
+            device_ids: ["2", "3"]

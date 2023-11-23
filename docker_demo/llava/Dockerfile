@@ -48,12 +48,12 @@ RUN echo 'export PATH="$PATH:$HOME/.dotnet"' >> ~/.bashrc
 
 WORKDIR /opt/app
 
-COPY --chown=vscode LLaVA .
-
 RUN source ~/miniconda3/bin/activate && \
     # conda init bash && \
     conda create -y -n llava python=3.10 && \
     conda activate llava
+
+COPY --chown=vscode LLaVA .
 
 RUN source ~/miniconda3/bin/activate && \
     conda activate llava && \

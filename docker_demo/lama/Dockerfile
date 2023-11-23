@@ -48,13 +48,13 @@ RUN echo 'export PATH="$PATH:$HOME/.dotnet"' >> ~/.bashrc
 
 WORKDIR /opt/app
 
-COPY --chown=vscode lama/conda_env.yml .
-
 RUN source ~/miniconda3/bin/activate && \
     # conda init bash && \
     conda env create -y -n lama -f conda_env.yml && \
     conda activate lama && \
     conda install -y -c pytorch pytorch torchvision torchaudio cudatoolkit=10.2
+
+COPY --chown=vscode lama/conda_env.yml .
 
 RUN source ~/miniconda3/bin/activate && \
     conda activate lama && \

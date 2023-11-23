@@ -10,8 +10,17 @@ RUN apt update && \
     apt install -yq \
         ffmpeg \
         dkms \
-        build-essential \
-        wget
+        build-essential
+
+# add user tools
+RUN sudo apt install -yq \
+        jq \
+        jp \
+        tree \
+        tldr \
+        iputils-ping \
+        wget \
+        curl
 
 # add git-lfs and install
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash && \
@@ -48,13 +57,13 @@ RUN echo 'export PATH="$PATH:$HOME/.dotnet"' >> ~/.bashrc
 
 WORKDIR /opt/app
 
-COPY --chown=vscode requirements.txt .
-
 RUN source ~/miniconda3/bin/activate && \
     # conda init bash && \
     conda create -y -n llava_int -c conda-forge -c pytorch python=3.10.8 pytorch=2.0.1 && \
     conda activate llava_int && \
     conda install -y -c nvidia cuda-compiler
+
+COPY --chown=vscode requirements.txt .
 
 RUN source ~/miniconda3/bin/activate && \
     conda activate llava_int && \
