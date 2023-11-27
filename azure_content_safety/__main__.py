@@ -30,8 +30,8 @@ def analyze_text(
     """Test the Azure Content Safety Text API.
 
     :param input_text: Input text to analyze
-    :param endpoint: Content Safety Resource Endpoint, defaults to os.environ["CONTENT_SAFETY_ENDPOINT"]
-    :param key: Content Safety Resource Key, defaults to os.environ["CONTENT_SAFETY_KEY"]
+    :param num_requests: Number of requests to send
+    :param interval_seconds: Seconds to delay between sending requests
 
     Example:
 
@@ -77,6 +77,15 @@ def _analyze_text(
     endpoint: str = os.environ["CONTENT_SAFETY_ENDPOINT"],
     key: str = os.environ["CONTENT_SAFETY_KEY"],
 ):
+    """Test the Azure Content Safety Jailbreak API.
+
+    :param input_text: Input text to analyze
+    :param endpoint: Content Safety Resource Endpoint, defaults to os.environ["CONTENT_SAFETY_ENDPOINT"]
+    :param key: Content Safety Resource Key, defaults to os.environ["CONTENT_SAFETY_KEY"]
+
+    :return: AnalyzeTextResult
+    """
+
     global client
     if client is None:
         client = ContentSafetyClient(endpoint, AzureKeyCredential(key))
@@ -89,16 +98,17 @@ def _analyze_text(
 
 def analyze_text_for_jailbreak(
     input_text: str,
-    endpoint: str = os.environ["CONTENT_SAFETY_ENDPOINT"],
-    key: str = os.environ["CONTENT_SAFETY_KEY"],
     num_requests: int = 1,
     interval_seconds: float = 0,
 ):
     """Test the Azure Content Safety Jailbreak API.
 
     :param input_text: Input text to analyze
-    :param endpoint: Content Safety Resource Endpoint, defaults to os.environ["CONTENT_SAFETY_ENDPOINT"]
-    :param key: Content Safety Resource Key, defaults to os.environ["CONTENT_SAFETY_KEY"]
+    :param num_requests: Number of requests to send
+    :param interval_seconds: Seconds to delay between sending requests
+
+    :raises httpx.HTTPStatusError: If the request fails
+    :return: dict
 
     Example:
 
@@ -113,17 +123,7 @@ def analyze_text_for_jailbreak(
     for i in range(num_requests):
         try:
             logger.info(f'Request: {i+1:<2} Analyze Text for Jailbreak: {input_text}')
-            response = httpx.post(
-                f"{endpoint}contentsafety/text:detectJailbreak?api-version=2023-10-15-preview",
-                headers={
-                    "Ocp-Apim-Subscription-Key": key,
-                    "Content-Type": "application/json",
-                },
-                json={"text": input_text},
-            )
-
-            response.raise_for_status()
-            response_json = response.json()
+            response_json = _analyze_text_for_jailbreak(input_text)
             logger.info(json.dumps(response_json, indent=2))
         except httpx.HTTPStatusError as e:
             error_json = e.response.json()
@@ -137,6 +137,34 @@ def analyze_text_for_jailbreak(
             raise
 
         time.sleep(interval_seconds)
+
+
+def _analyze_text_for_jailbreak(
+    input_text: str,
+    endpoint: str = os.environ["CONTENT_SAFETY_ENDPOINT"],
+    key: str = os.environ["CONTENT_SAFETY_KEY"],
+):
+    """Test the Azure Content Safety Jailbreak API.
+
+    :param input_text: Input text to analyze
+    :param endpoint: Content Safety Resource Endpoint, defaults to os.environ["CONTENT_SAFETY_ENDPOINT"]
+    :param key: Content Safety Resource Key, defaults to os.environ["CONTENT_SAFETY_KEY"]
+
+    :return: dict
+    """
+    response = httpx.post(
+        f"{endpoint}contentsafety/text:detectJailbreak?api-version=2023-10-15-preview",
+        headers={
+            "Ocp-Apim-Subscription-Key": key,
+            "Content-Type": "application/json",
+        },
+        json={"text": input_text},
+    )
+
+    response.raise_for_status()
+    response_json = response.json()
+
+    return response_json
 
 
 def analyze_image(
