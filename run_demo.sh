@@ -67,6 +67,7 @@ if [ "$RUN_LLAVA_INT" = "True" ]; then
   conda deactivate; \
   conda activate llava_int; \
   export LLAVA_INTERACTIVE_HOME=.; \
+  export GRADIO_NO_RELOAD=True; \
   python llava_interactive.py \
     --moderate \
     input_text_guardlist \
