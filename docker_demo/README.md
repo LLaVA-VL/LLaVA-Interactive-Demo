@@ -47,9 +47,5 @@ docker exec -it 4afbed1fce /bin/bash
 ## Test Docker Nvidia GPUs
 
 ```bash
-docker build -t cuda-test -f docker_demo/cuda_test/Dockerfile .
-```
-
-```bash
 docker run --gpus all nvidia/cuda:12.2.2-cudnn8-devel-ubuntu22.04 nvidia-smi
 ```
