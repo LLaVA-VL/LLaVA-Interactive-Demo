@@ -31,6 +31,14 @@ To run the demo, simply run the shell script.
 ./run_demo.sh
 ```
 
+# Run the demo in Background
+
+To run the demo, simply run the shell script.
+
+```bash
+nohup ./run_demo.sh > demo.log 2>&1 &
+```
+
 <p align="center">
     <img src="https://github.com/LLaVA-VL/llava-interactive/blob/main/images/llava_interactive_workflow.png" width="50%">
     <br>
@@ -48,6 +56,15 @@ ngrok config add-authtoken $NGROK_AUTHTOKEN
 
 ngrok start llavainteractive --config ./ngrok.yml,/home/vscode/.config/ngrok/ngrok.yml
 ```
+
+## Run ngrok in background
+
+```bash
+nohup ngrok start llavainteractive --config ./ngrok.yml,/home/vscode/.config/ngrok/ngrok.yml > ngrok.log 2>&1 &
+```
+## Vew Ngrok Process
+
+http://localhost:4040/status
 
 # Citation
 
