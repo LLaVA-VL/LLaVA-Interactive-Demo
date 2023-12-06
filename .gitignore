@@ -45,3 +45,6 @@ ckpts*
 
 # Demo Resources
 !demo_resources/**/*
+
+# Ignore No Hangup Process Output
+nohup.out
