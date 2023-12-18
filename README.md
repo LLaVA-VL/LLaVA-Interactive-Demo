@@ -28,6 +28,7 @@ source setup.sh
 To run the demo, simply run the shell script.
 
 ```bash
+source .env.export
 ./run_demo.sh
 ```
 
