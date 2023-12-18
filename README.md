@@ -67,6 +67,20 @@ nohup ngrok start llavainteractive --config ./ngrok.yml,/home/vscode/.config/ngr
 
 http://localhost:4040/status
 
+## Viewing Running Background Processes
+
+```bash
+ps -ef --forest
+```
+
+```bash
+ps -ef --forest e
+```
+
+```bash
+ps --help a
+```
+
 # Citation
 
 If you find LLaVA-Interactive useful for your research and applications, please cite using this BibTeX:
