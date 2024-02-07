@@ -14,6 +14,7 @@
                 "--moderate",
                 "input_text_guardlist",
                 "input_text_aics",
+                "input_text_aics_jailbreak",
                 "input_image_aics",
                 // "input_openai",
                 "output_text_guardlist",
@@ -26,6 +27,7 @@
             "env": {
                 "LLAVA_INTERACTIVE_HOME": ".",
                 "LOGLEVEL": "DEBUG",
+                "CUDA_VISIBLE_DEVICES": "2,3",
             },
         },
     ]
