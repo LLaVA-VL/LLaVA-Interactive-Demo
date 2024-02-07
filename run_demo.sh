@@ -16,7 +16,7 @@ fi
 
 echo "RUN_LLAVA_INT: $RUN_LLAVA_INT"
 
-export CUDA_VISIBLE_DEVICES=0,1
+export CUDA_VISIBLE_DEVICES=2,3
 
 # Test for environment variables
 if [ -z "$GUARDLIST_KEY" ]; then
