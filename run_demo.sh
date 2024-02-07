@@ -78,9 +78,12 @@ if [ "$RUN_LLAVA_INT" = "True" ]; then
     python llava_interactive.py \
       --moderate \
       input_text_aics \
+      input_text_guardlist \
       input_text_aics_jailbreak \
       input_image_aics \
+      output_text_guardlist \
       output_text_aics \
+      gligen_input_text_guardlist \
       gligen_input_text_aics \
       gligen_output_image_aics
   )
