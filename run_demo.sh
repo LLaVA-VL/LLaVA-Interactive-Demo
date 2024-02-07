@@ -34,13 +34,17 @@ fi
   pwd
   conda deactivate
   conda activate llava
+
+  export HOST_ADDRESS="0.0.0.0"
   export CONTROLLER_PORT=10000
   export MODEL_WORKER_PORT=40000
+
   python -m llava.serve.controller \
-    --host 0.0.0.0 \
+    --host $HOST_ADDRESS \
     --port $CONTROLLER_PORT &
+
   python -m llava.serve.model_worker \
-    --host 0.0.0.0 \
+    --host $HOST_ADDRESS \
     --controller http://localhost:$CONTROLLER_PORT \
     --port $MODEL_WORKER_PORT \
     --worker http://localhost:$MODEL_WORKER_PORT \
@@ -66,17 +70,17 @@ if [ "$RUN_LLAVA_INT" = "True" ]; then
     pwd
     conda deactivate
     conda activate llava_int
+
+    export LOGLEVEL=DEBUG
     export LLAVA_INTERACTIVE_HOME=.
     export GRADIO_NO_RELOAD=True
+
     python llava_interactive.py \
       --moderate \
-      input_text_guardlist \
       input_text_aics \
       input_text_aics_jailbreak \
       input_image_aics \
-      output_text_guardlist \
       output_text_aics \
-      gligen_input_text_guardlist \
       gligen_input_text_aics \
       gligen_output_image_aics
   )
