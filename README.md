@@ -77,8 +77,33 @@ ps -ef --forest
 ps -ef --forest e
 ```
 
+### Example Output
+
+```zsh
+...
+vscode     19000       1  0 Jan17 ?        SNl  146:04 ngrok start llavainteractive --config ./ngrok.yml,/home/vscode/.config/ngrok/ngrok.yml DOCKER_BUILDKIT=1 HOSTNAME=cf7954859b6f CONTENT_MODERATOR_NAME=lla
+vscode     95922       1  0 Jan17 ?        SN     0:00 /bin/bash ./run_demo.sh DOCKER_BUILDKIT=1 HOSTNAME=cf7954859b6f CONTENT_MODERATOR_NAME=llava-int-contentmoderator HOME=/home/vscode EFFICIENT_AI_SUBSCRIP
+vscode     96587   95922  0 Jan17 ?        SN     0:00  \_ /bin/bash ./run_demo.sh DOCKER_BUILDKIT=1 HOSTNAME=cf7954859b6f CONTENT_MODERATOR_NAME=llava-int-contentmoderator HOME=/home/vscode EFFICIENT_AI_SUBS
+vscode     96595   96587 96 Jan17 ?        SNl  29249:06      \_ python llava_interactive.py --moderate input_text_guardlist input_text_aics input_text_aics_jailbreak input_image_aics output_text_guardlist ou
+vscode     95948       1  0 Jan17 ?        SNl   34:45 python -m llava.serve.controller --host 0.0.0.0 --port 10000 SHELL=/bin/bash LSCOLORS=Gxfxcxdxbxegedabagacad USER_ZDOTDIR=/home/vscode COLORTERM=truecolo
+vscode     95949       1  0 Jan17 ?        SNl   60:10 python -m llava.serve.model_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --model-path ./llava-v
+vscode     96487       1  0 Jan17 ?        SN     0:02 python ../lama_server.py SHELL=/bin/bash LSCOLORS=Gxfxcxdxbxegedabagacad USER_ZDOTDIR=/home/vscode COLORTERM=truecolor LESS=-R TERM_PROGRAM_VERSION=1.85.
+vscode   1947877   96487  8 19:07 ?        SNl    0:14  \_ /home/vscode/miniconda3/envs/lama/bin/python /workspaces/LLaVA-Interactive-Demo/lama_server.py SHELL=/bin/bash LSCOLORS=Gxfxcxdxbxegedabagacad USER_Z
+...
+```
+
 ```bash
 ps --help a
+```
+
+### Kill Demo Process
+
+```bash
+pkill --signal 9 -f llava.serve.controller
+pkill --signal 9 -f llava.serve.model_worker
+pkill --signal 9 -f lama_server
+pkill --signal 9 -f llava_interactive
+pkill --signal 9 -f ngrok
 ```
 
 # Citation
