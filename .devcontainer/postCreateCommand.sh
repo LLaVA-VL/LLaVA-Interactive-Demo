@@ -26,7 +26,8 @@ conda create -n llava_int -c conda-forge -c pytorch python=3.10.8 pytorch=2.0.1 
 conda activate llava_int
 
 # Install Nvidia Cuda Compiler
-conda install -y -c nvidia cuda-compiler
+CUDA_VERSION=11.8
+conda install -y -c nvidia cuda=$CUDA_VERSION cuda-nvcc=$CUDA_VERSION
 
 pip install -r requirements.txt
 
