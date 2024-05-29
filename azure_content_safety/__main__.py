@@ -9,9 +9,7 @@ import requests
 from azure.ai.contentsafety import ContentSafetyClient
 from azure.ai.contentsafety.models import (
     AnalyzeImageOptions,
-    AnalyzeImageResult,
     AnalyzeTextOptions,
-    AnalyzeTextResult,
     ImageData,
 )
 from azure.core.credentials import AzureKeyCredential
@@ -55,7 +53,9 @@ def analyze_text(
             logger.info(f'Request: {i+1:<2} Analyze Text: {input_text}')
             response = _analyze_text(input_text)
 
-            _print_result(response)
+            for category in response.categories_analysis:
+                logger.info(f"{category.category} severity: {category.severity}")
+
         except HttpResponseError as e:
             logger.error("Analyze text failed.")
             if e.error:
@@ -206,7 +206,10 @@ def analyze_image(
             logger.info(f'Request: {i+1:<2} Analyze Image: {image_url}')
             request = AnalyzeImageOptions(image=ImageData(content=image_base64_str))
             response = client.analyze_image(request)
-            _print_result(response)
+
+            for category in response.categories_analysis:
+                logger.info(f"{category.category} severity: {category.severity}")
+
         except HttpResponseError as e:
             logger.error("Analyze image failed.")
             if e.error:
@@ -217,17 +220,6 @@ def analyze_image(
             raise
 
         time.sleep(interval_seconds)
-
-
-def _print_result(response: AnalyzeTextResult | AnalyzeImageResult):
-    if response.hate_result:
-        logger.info(f"Hate severity: {response.hate_result.severity}")
-    if response.self_harm_result:
-        logger.info(f"SelfHarm severity: {response.self_harm_result.severity}")
-    if response.sexual_result:
-        logger.info(f"Sexual severity: {response.sexual_result.severity}")
-    if response.violence_result:
-        logger.info(f"Violence severity: {response.violence_result.severity}")
 
 
 if __name__ == "__main__":
