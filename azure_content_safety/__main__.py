@@ -6,7 +6,7 @@ import time
 import fire
 import httpx
 import requests
-from azure.identity import DefaultAzureCredential
+from azure.identity import DefaultAzureCredential, ManagedIdentityCredential, AzureCliCredential
 from azure.ai.contentsafety import ContentSafetyClient
 from azure.ai.contentsafety.models import (
     AnalyzeImageOptions,
@@ -75,21 +75,25 @@ client: ContentSafetyClient = None
 def _analyze_text(
     input_text: str,
     endpoint: str = os.environ["CONTENT_SAFETY_ENDPOINT"],
-    client_id=os.environ["CONTENT_SAFETY_OBJECT_ID"],
+    app_id=os.environ["LLAVA_INTERACTIVE_CLIENT_ID"],
+    # app_id=os.environ["CONTENT_SAFETY_APP_ID"],
+    object_id=os.environ["CONTENT_SAFETY_OBJECT_ID"],
 ):
     """Test the Azure Content Safety Jailbreak API.
 
     :param input_text: Input text to analyze
     :param endpoint: Content Safety Resource Endpoint, defaults to os.environ["CONTENT_SAFETY_ENDPOINT"]
-    :param key: Content Safety Resource Key, defaults to os.environ["CONTENT_SAFETY_KEY"]
 
     :return: AnalyzeTextResult
     """
 
     global client
     if client is None:
-        default_credential = DefaultAzureCredential(managed_identity_client_id=client_id)
-        client = ContentSafetyClient(endpoint, default_credential)
+        default_credential = DefaultAzureCredential(managed_identity_client_id=app_id)
+        azure_credential = AzureCliCredential()
+        # client = ContentSafetyClient(endpoint, ManagedIdentityCredential())
+        # client = ContentSafetyClient(endpoint, default_credential)
+        client = ContentSafetyClient(endpoint, azure_credential)
 
     request = AnalyzeTextOptions(text=input_text)
     response = client.analyze_text(request)
@@ -143,24 +147,38 @@ def analyze_text_for_jailbreak(
 def _analyze_text_for_jailbreak(
     input_text: str,
     endpoint: str = os.environ["CONTENT_SAFETY_ENDPOINT"],
-    key: str = os.environ["CONTENT_SAFETY_KEY"],
+    object_id: str = os.environ["CONTENT_SAFETY_OBJECT_ID"],
 ):
     """Test the Azure Content Safety Jailbreak API.
 
     :param input_text: Input text to analyze
     :param endpoint: Content Safety Resource Endpoint, defaults to os.environ["CONTENT_SAFETY_ENDPOINT"]
-    :param key: Content Safety Resource Key, defaults to os.environ["CONTENT_SAFETY_KEY"]
+    :param object_id: Content Safety System Identity Object ID, defaults to os.environ["CONTENT_SAFETY_OBJECT_ID"]
 
     :return: dict
     """
+
+    default_credential = DefaultAzureCredential(managed_identity_client_id=object_id)
+    access_token = default_credential.get_token("https://api.cognitiveservices.azure.com/.default")
+    access_token2 = default_credential.get_token(endpoint)
+
     response = httpx.post(
-        f"{endpoint}contentsafety/text:detectJailbreak?api-version=2023-10-15-preview",
+        f"{endpoint}contentsafety/text:shieldPrompt?api-version=2024-02-15-preview",
         headers={
-            "Ocp-Apim-Subscription-Key": key,
+            "Ocp-Apim-Subscription-Key": access_token.token,
             "Content-Type": "application/json",
         },
-        json={"text": input_text},
+        json={"userPrompt": input_text, "documents": []},
     )
+
+    # response = httpx.post(
+    #     f"{endpoint}contentsafety/text:detectJailbreak?api-version=2023-10-15-preview",
+    #     headers={
+    #         "Ocp-Apim-Subscription-Key": key,
+    #         "Content-Type": "application/json",
+    #     },
+    #     json={"text": input_text},
+    # )
 
     response.raise_for_status()
     response_json = response.json()
@@ -171,7 +189,7 @@ def _analyze_text_for_jailbreak(
 def analyze_image(
     image_url: str,
     endpoint: str = os.environ['CONTENT_SAFETY_ENDPOINT'],
-    key: str = os.environ['CONTENT_SAFETY_KEY'],
+    object_id: str = os.environ["CONTENT_SAFETY_OBJECT_ID"],
     num_requests: int = 1,
     interval_seconds: float = 0,
 ):
@@ -179,7 +197,7 @@ def analyze_image(
 
     :param image_file_path: File path to image
     :param endpoint: Content Safety Resource Endpoint, defaults to os.environ['CONTENT_SAFETY_ENDPOINT']
-    :param key: Content Safety Key, defaults to os.environ['CONTENT_SAFETY_KEY']
+    :param object_id: Content Safety System Identity Object ID, defaults to os.environ['CONTENT_SAFETY_OBJECT_ID']
 
     Example:
 
@@ -196,8 +214,8 @@ def analyze_image(
         ```
     """
 
-    client_id = os.environ["CONTENT_SAFETY_OBJECT_ID"]
-    default_credential = DefaultAzureCredential(managed_identity_client_id=client_id)
+    # TODO: Can we assign object_id to client_id?
+    default_credential = DefaultAzureCredential(managed_identity_client_id=object_id)
     client = ContentSafetyClient(endpoint, default_credential)
 
     for i in range(num_requests):

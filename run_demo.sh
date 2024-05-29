@@ -24,8 +24,8 @@ if [ -z "$GUARDLIST_KEY" ]; then
   exit 1
 fi
 
-if [ -z "$CONTENT_SAFETY_KEY" ]; then
-  echo "❗ CONTENT_SAFETY_KEY environment variable must be set!"
+if [ -z "$CONTENT_SAFETY_OBJECT_ID" ]; then
+  echo "❗ CONTENT_SAFETY_OBJECT_ID environment variable must be set!"
   exit 1
 fi
 
