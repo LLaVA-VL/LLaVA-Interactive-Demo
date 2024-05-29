@@ -6,13 +6,13 @@ import time
 import fire
 import httpx
 import requests
+from azure.identity import DefaultAzureCredential
 from azure.ai.contentsafety import ContentSafetyClient
 from azure.ai.contentsafety.models import (
     AnalyzeImageOptions,
     AnalyzeTextOptions,
     ImageData,
 )
-from azure.core.credentials import AzureKeyCredential
 from azure.core.exceptions import HttpResponseError
 
 from .logger import get_logger
@@ -75,7 +75,7 @@ client: ContentSafetyClient = None
 def _analyze_text(
     input_text: str,
     endpoint: str = os.environ["CONTENT_SAFETY_ENDPOINT"],
-    key: str = os.environ["CONTENT_SAFETY_KEY"],
+    client_id=os.environ["CONTENT_SAFETY_OBJECT_ID"],
 ):
     """Test the Azure Content Safety Jailbreak API.
 
@@ -88,7 +88,8 @@ def _analyze_text(
 
     global client
     if client is None:
-        client = ContentSafetyClient(endpoint, AzureKeyCredential(key))
+        default_credential = DefaultAzureCredential(managed_identity_client_id=client_id)
+        client = ContentSafetyClient(endpoint, default_credential)
 
     request = AnalyzeTextOptions(text=input_text)
     response = client.analyze_text(request)
@@ -195,7 +196,9 @@ def analyze_image(
         ```
     """
 
-    client = ContentSafetyClient(endpoint, AzureKeyCredential(key))
+    client_id = os.environ["CONTENT_SAFETY_OBJECT_ID"]
+    default_credential = DefaultAzureCredential(managed_identity_client_id=client_id)
+    client = ContentSafetyClient(endpoint, default_credential)
 
     for i in range(num_requests):
         try:
