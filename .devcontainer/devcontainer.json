@@ -34,11 +34,11 @@
                         "path": "/usr/bin/zsh"
                     },
                 },
-                "[python]": {
-                }
+                "[python]": {}
             },
             "extensions": [
                 "aaron-bond.better-comments",
+                "dotenv.dotenv-vscode",
                 "eamodio.gitlens",
                 "EditorConfig.EditorConfig",
                 "foxundermoon.shell-format",
@@ -56,7 +56,7 @@
                 "njpwerner.autodocstring",
                 "redhat.vscode-yaml",
                 "stkb.rewrap",
-                "yzhang.markdown-all-in-one",
+                "yzhang.markdown-all-in-one"
             ]
         }
     },
