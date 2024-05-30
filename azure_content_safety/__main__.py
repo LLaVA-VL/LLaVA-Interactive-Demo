@@ -89,10 +89,14 @@ def _analyze_text(
 
     global client
     if client is None:
-        default_credential = DefaultAzureCredential(managed_identity_client_id=app_id)
-        azure_credential = AzureCliCredential()
-        # client = ContentSafetyClient(endpoint, ManagedIdentityCredential())
+        # default_credential = DefaultAzureCredential()
+        # default_credential = DefaultAzureCredential(managed_identity_client_id=app_id)
         # client = ContentSafetyClient(endpoint, default_credential)
+
+        # managed_identity_credential = ManagedIdentityCredential(client_id=app_id)
+        # client = ContentSafetyClient(endpoint, managed_identity_credential)
+
+        azure_credential = AzureCliCredential()
         client = ContentSafetyClient(endpoint, azure_credential)
 
     request = AnalyzeTextOptions(text=input_text)
