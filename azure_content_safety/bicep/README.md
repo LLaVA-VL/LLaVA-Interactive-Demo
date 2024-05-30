@@ -14,6 +14,13 @@ BICEP_FILE_PATH="./azure_content_safety/bicep/disableLocalAuth.bicep"
 az cognitiveservices account show --subscription $EFFICIENT_AI_SUBSCRIPTION_ID -g $RESOURCE_GROUP_NAME -n $CONTENT_SAFETY_NAME --query "{ disableLocalAuth: properties.disableLocalAuth }"
 ```
 
+```powershell
+Install-Module -Force Az.CognitiveServices
+Connect-AzAccount -UseDeviceAuthentication
+Set-azcontext -subscription $EFFICIENT_AI_SUBSCRIPTION_ID
+Set-AzCognitiveServicesAccount -ResourceGroupName $RESOURCE_GROUP_NAME -Name $CONTENT_SAFETY_NAME -DisableLocalAuth $true -WhatIf
+```
+
 ## What If Deployment
 
 ```bash
