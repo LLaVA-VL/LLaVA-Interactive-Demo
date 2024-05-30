@@ -106,6 +106,20 @@ pkill --signal 9 -f llava_interactive
 pkill --signal 9 -f ngrok
 ```
 
+## Fetching Information about User Managed Identities
+
+```powershell
+az identity list -g $RESOURCE_GROUP_NAME --subscription $EFFICIENT_AI_SUBSCRIPTION_ID
+```
+
+## Fetching Information about System Managed Identities
+
+```powershell
+az cognitiveservices account show --subscription $EFFICIENT_AI_SUBSCRIPTION_ID -g $RESOURCE_GROUP_NAME -n $CONTENT_SAFETY_NAME --query "identity"
+az cognitiveservices account show --subscription $EFFICIENT_AI_SUBSCRIPTION_ID -g $RESOURCE_GROUP_NAME -n $CONTENT_MODERATOR_NAME --query "identity"
+```
+
+
 # Citation
 
 If you find LLaVA-Interactive useful for your research and applications, please cite using this BibTeX:
