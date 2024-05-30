@@ -41,3 +41,12 @@ az deployment group create `
 --query "properties.provisioningState" `
 -o tsv
 ```
+
+## Other
+
+```bash
+RESOURCE_ID=$(az cognitiveservices account show --subscription $EFFICIENT_AI_SUBSCRIPTION_ID -g $RESOURCE_GROUP_NAME -n $CONTENT_SAFETY_NAME --query "id" -o tsv)
+az role assignment list --assignee "SC-mr332@microsoft.com" --scope $RESOURCE_ID
+az role assignment list --assignee $CONTENT_SAFETY_APP_ID --scope $RESOURCE_ID --query "[].roleDefinitionName"
+az role assignment list --assignee $LLAVA_INTERACTIVE_CLIENT_ID --scope $RESOURCE_ID --query "[].roleDefinitionName"
+```
