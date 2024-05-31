@@ -4,9 +4,9 @@ import time
 from pathlib import Path
 
 import fire
+from azure.identity import DefaultAzureCredential
 from azure.cognitiveservices.vision.contentmoderator import ContentModeratorClient
 from azure.cognitiveservices.vision.contentmoderator.models import Evaluate, Screen
-from msrest.authentication import CognitiveServicesCredentials
 
 from .logger import get_logger
 
@@ -16,7 +16,6 @@ logger = get_logger(__name__)
 def screen_text(
     text_file_path: str | Path,
     endpoint=os.environ["CONTENT_MODERATOR_ENDPOINT"],
-    key=os.environ["CONTENT_MODERATOR_KEY"],
     num_requests: int = 1,
     interval_seconds: float = 0,
 ):
@@ -24,7 +23,6 @@ def screen_text(
 
     :param text_file_path: Path to text file
     :param endpoint: Content Moderation Service Endpoint, defaults to os.environ["CONTENT_MODERATOR_ENDPOINT"]
-    :param key: Content Moderation Key, defaults to os.environ["CONTENT_MODERATOR_KEY"]
 
     Example:
 
@@ -34,7 +32,8 @@ def screen_text(
         ```
     """
 
-    client = ContentModeratorClient(endpoint=endpoint, credentials=CognitiveServicesCredentials(key))
+    credential = DefaultAzureCredential()
+    client = ContentModeratorClient(endpoint=endpoint, credentials=credential)
 
     logger.info(f'Text Moderation: {text_file_path}')
     with open(text_file_path, "rb") as text_fd:
@@ -52,7 +51,6 @@ def screen_text(
 def screen_image(
     image_url: str,
     endpoint=os.environ["CONTENT_MODERATOR_ENDPOINT"],
-    key=os.environ["CONTENT_MODERATOR_KEY"],
     num_requests: int = 1,
     interval_seconds: float = 0,
 ):
@@ -60,7 +58,6 @@ def screen_image(
 
     :param image_url: Image URL
     :param endpoint: Content Moderation Service Endpoint, defaults to os.environ["CONTENT_MODERATOR_ENDPOINT"]
-    :param key: Content Moderation Key, defaults to os.environ["CONTENT_MODERATOR_KEY"]
 
     Example:
 
@@ -70,7 +67,8 @@ def screen_image(
         ```
     """
 
-    client = ContentModeratorClient(endpoint=endpoint, credentials=CognitiveServicesCredentials(key))
+    credential = DefaultAzureCredential()
+    client = ContentModeratorClient(endpoint=endpoint, credentials=credential)
 
     for i in range(num_requests):
         logger.info(f"Request: {i+1:<2} Evaluate image {image_url}")
