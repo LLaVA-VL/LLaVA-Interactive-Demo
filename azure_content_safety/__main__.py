@@ -6,7 +6,7 @@ import time
 import fire
 import httpx
 import requests
-from azure.identity import DefaultAzureCredential, ManagedIdentityCredential, AzureCliCredential
+from azure.identity import DefaultAzureCredential
 from azure.ai.contentsafety import ContentSafetyClient
 from azure.ai.contentsafety.models import (
     AnalyzeImageOptions,
@@ -16,6 +16,7 @@ from azure.ai.contentsafety.models import (
 from azure.core.exceptions import HttpResponseError
 
 from .logger import get_logger
+from simple_jwt import jwt
 
 logger = get_logger(__name__, logger_blocklist=["azure", "azure.core", "azure.ai"])
 
@@ -89,20 +90,32 @@ def _analyze_text(
 
     global client
     if client is None:
-        # default_credential = DefaultAzureCredential()
-        # default_credential = DefaultAzureCredential(managed_identity_client_id=app_id)
-        # client = ContentSafetyClient(endpoint, default_credential)
+        credential = DefaultAzureCredential()
+        # credential = DefaultAzureCredential(managed_identity_client_id=app_id)
+        # credential = ManagedIdentityCredential(client_id=app_id)
+        # credential = AzureCliCredential()
 
-        # managed_identity_credential = ManagedIdentityCredential(client_id=app_id)
-        # client = ContentSafetyClient(endpoint, managed_identity_credential)
+        token = credential.get_token("https://management.azure.com/.default")
+        print_jwt_claims(token.token, ["appid", "name"])
 
-        azure_credential = AzureCliCredential()
-        client = ContentSafetyClient(endpoint, azure_credential)
+        client = ContentSafetyClient(endpoint, credential)
 
     request = AnalyzeTextOptions(text=input_text)
     response = client.analyze_text(request)
 
     return response
+
+
+def print_jwt_claims(token: str, claims: list[str]):
+    # decoded_token = jwt.decode(token, algorithms=["RS256"])
+    # middle_segment = token.split('.')[1].rstrip("'").lstrip("'")
+    # decoded_token_str = base64.b64decode(middle_segment).decode('utf-8')
+    # decoded_token = json.loads(decoded_token_str)
+    decoded_token = jwt.decode(token)
+
+    for claim in claims:
+        value = decoded_token.get(claim)
+        print(f"{claim}: {value}")
 
 
 def analyze_text_for_jailbreak(
