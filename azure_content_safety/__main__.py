@@ -96,7 +96,7 @@ def _analyze_text(
         # credential = AzureCliCredential()
 
         token = credential.get_token("https://management.azure.com/.default")
-        print_jwt_claims(token.token, ["appid", "name"])
+        # print_jwt_claims(token.token, ["appid", "name"])
 
         client = ContentSafetyClient(endpoint, credential)
 

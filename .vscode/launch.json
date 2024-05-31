@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "Python: llava_interactive",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "llava_interactive",
             "justMyCode": true,
@@ -32,7 +32,7 @@
         },
         {
             "name": "Python: args_tester",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "args_test",
             "justMyCode": true,
@@ -49,7 +49,7 @@
         },
         {
             "name": "Python: Guardlist",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "guardlist",
             "justMyCode": true,
@@ -65,7 +65,7 @@
         },
         {
             "name": "Python: Content Moderation - Screen Text",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "azure_content_moderator",
             "justMyCode": true,
@@ -78,7 +78,7 @@
         },
         {
             "name": "Python: Content Moderation - Screen Image",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "azure_content_moderator",
             "justMyCode": true,
@@ -90,8 +90,18 @@
             "envFile": "${workspaceFolder}/.env"
         },
         {
+            "name": "Python: Content Safety - Token Tester",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "azure_content_safety.token_tester",
+            "justMyCode": true,
+            "args": [
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
             "name": "Python: Content Safety - Analyze Text",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "azure_content_safety",
             "justMyCode": true,
@@ -106,7 +116,7 @@
         },
         {
             "name": "Python: Content Safety Tests - Analyze Text",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "azure_content_safety.tests",
             "justMyCode": true,
@@ -116,7 +126,7 @@
         },
         {
             "name": "Python: Content Safety - Analyze Text for Jailbreak",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "azure_content_safety",
             "justMyCode": true,
@@ -129,7 +139,7 @@
         },
         {
             "name": "Python: Content Safety - Analyze Image",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "azure_content_safety",
             "justMyCode": true,
