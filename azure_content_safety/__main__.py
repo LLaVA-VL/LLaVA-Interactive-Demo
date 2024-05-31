@@ -164,7 +164,8 @@ def analyze_text_for_jailbreak(
 def _analyze_text_for_jailbreak(
     input_text: str,
     endpoint: str = os.environ["CONTENT_SAFETY_ENDPOINT"],
-    object_id: str = os.environ["CONTENT_SAFETY_OBJECT_ID"],
+    # object_id: str = os.environ["CONTENT_SAFETY_OBJECT_ID"],
+    key: str = os.environ["CONTENT_SAFETY_KEY"],
 ):
     """Test the Azure Content Safety Jailbreak API.
 
@@ -175,14 +176,14 @@ def _analyze_text_for_jailbreak(
     :return: dict
     """
 
-    default_credential = DefaultAzureCredential(managed_identity_client_id=object_id)
-    access_token = default_credential.get_token("https://api.cognitiveservices.azure.com/.default")
-    access_token2 = default_credential.get_token(endpoint)
+    # default_credential = DefaultAzureCredential(managed_identity_client_id=object_id)
+    # access_token = default_credential.get_token("https://api.cognitiveservices.azure.com/.default")
+    # access_token2 = default_credential.get_token(endpoint)
 
     response = httpx.post(
         f"{endpoint}contentsafety/text:shieldPrompt?api-version=2024-02-15-preview",
         headers={
-            "Ocp-Apim-Subscription-Key": access_token.token,
+            "Ocp-Apim-Subscription-Key": key,
             "Content-Type": "application/json",
         },
         json={"userPrompt": input_text, "documents": []},
