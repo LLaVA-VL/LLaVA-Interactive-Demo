@@ -119,6 +119,11 @@ az cognitiveservices account show --subscription $EFFICIENT_AI_SUBSCRIPTION_ID -
 az cognitiveservices account show --subscription $EFFICIENT_AI_SUBSCRIPTION_ID -g $RESOURCE_GROUP_NAME -n $CONTENT_MODERATOR_NAME --query "identity"
 ```
 
+## Fetching Information about Azure AD App
+
+```powershell
+az ad app show --id $LLAVA_INT_APP_APP_ID --query "{ appId: appId, objectId: id }"
+```
 
 # Citation
 
