@@ -154,23 +154,71 @@ def _analyze_text_for_jailbreak(
     credential = DefaultAzureCredential()
     access_token = credential.get_token("https://cognitiveservices.azure.com/.default")
 
-    # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentsafety/text-operations/detect-text-prompt-injection-options?view=rest-cognitiveservices-contentsafety-2024-02-15-preview&tabs=HTTP
-    # response = httpx.post(
-    #     f"{endpoint}contentsafety/text:shieldPrompt?api-version=2024-02-15-preview",
-    #     headers={
-    #         # "Ocp-Apim-Subscription-Key": key,
-    #         "Content-Type": "application/json",
-    #     },
-    #     json={"userPrompt": input_text, "documents": []},
-    # )
-
-    # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentsafety/text-operations/detect-text-protected-material?view=rest-cognitiveservices-contentsafety-2024-02-15-preview&tabs=HTTP
-    # {endpoint}/contentsafety/text:detectProtectedMaterial?api-version=2024-02-15-preview
-
     # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentsafety/text-operations/detect-text-jailbreak?view=rest-cognitiveservices-contentsafety-2024-02-15-preview&tabs=HTTP
-
     response = httpx.post(
         f"{endpoint}/contentsafety/text:detectJailbreak?api-version=2024-02-15-preview",
+        headers={
+            "Authorization": f"Bearer {access_token.token}",
+            "Content-Type": "application/json",
+        },
+        json={"text": input_text},
+    )
+
+    response.raise_for_status()
+    response_json = response.json()
+
+    return response_json
+
+
+def analyze_text_for_prompt_injection(
+    input_text: str,
+    endpoint: str = os.environ["CONTENT_SAFETY_ENDPOINT"],
+):
+    """Test the Azure Content Safety Protected Material API.
+
+    :param input_text: Input text to analyze
+    :param endpoint: Content Safety Resource Endpoint, defaults to os.environ["CONTENT_SAFETY_ENDPOINT"]
+
+    :return: dict
+    """
+
+    credential = DefaultAzureCredential()
+    access_token = credential.get_token("https://cognitiveservices.azure.com/.default")
+
+    # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentsafety/text-operations/detect-text-prompt-injection-options?view=rest-cognitiveservices-contentsafety-2024-02-15-preview&tabs=HTTP
+    response = httpx.post(
+        f"{endpoint}contentsafety/text:shieldPrompt?api-version=2024-02-15-preview",
+        headers={
+            "Authorization": f"Bearer {access_token.token}",
+            "Content-Type": "application/json",
+        },
+        json={"userPrompt": input_text, "documents": []},
+    )
+
+    response.raise_for_status()
+    response_json = response.json()
+
+    return response_json
+
+
+def analyze_text_for_protected_material(
+    input_text: str,
+    endpoint: str = os.environ["CONTENT_SAFETY_ENDPOINT"],
+):
+    """Test the Azure Content Safety Protected Material API.
+
+    :param input_text: Input text to analyze
+    :param endpoint: Content Safety Resource Endpoint, defaults to os.environ["CONTENT_SAFETY_ENDPOINT"]
+
+    :return: dict
+    """
+
+    credential = DefaultAzureCredential()
+    access_token = credential.get_token("https://cognitiveservices.azure.com/.default")
+
+    # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentsafety/text-operations/detect-text-protected-material?view=rest-cognitiveservices-contentsafety-2024-02-15-preview&tabs=HTTP
+    response = httpx.post(
+        f"{endpoint}/contentsafety/text:detectProtectedMaterial?api-version=2024-02-15-preview",
         headers={
             "Authorization": f"Bearer {access_token.token}",
             "Content-Type": "application/json",
