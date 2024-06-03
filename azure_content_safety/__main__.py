@@ -16,7 +16,6 @@ from azure.ai.contentsafety.models import (
 from azure.core.exceptions import HttpResponseError
 
 from .logger import get_logger
-from simple_jwt import jwt
 
 logger = get_logger(__name__, logger_blocklist=["azure", "azure.core", "azure.ai"])
 
