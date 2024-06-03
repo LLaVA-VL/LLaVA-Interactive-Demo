@@ -33,13 +33,13 @@ def screen_text(
     """
 
     credential = DefaultAzureCredential()
-    client = ContentModeratorClient(endpoint=endpoint, credentials=credential)
+    client = ContentModeratorClient(endpoint, credential)
 
     logger.info(f'Text Moderation: {text_file_path}')
-    with open(text_file_path, "rb") as text_fd:
+    with open(text_file_path, "rb") as text_file:
         for i in range(num_requests):
             screen = client.text_moderation.screen_text(
-                text_content_type="text/plain", text_content=text_fd, language="eng", autocorrect=True, pii=True
+                text_content_type="text/plain", text_content=text_file, language="eng", autocorrect=True, pii=True
             )
             assert isinstance(screen, Screen)
             logger.info(f'Reqest: {i+1:<2} Text Moderation: Screen Text Response')
@@ -68,7 +68,7 @@ def screen_image(
     """
 
     credential = DefaultAzureCredential()
-    client = ContentModeratorClient(endpoint=endpoint, credentials=credential)
+    client = ContentModeratorClient(endpoint, credential)
 
     for i in range(num_requests):
         logger.info(f"Request: {i+1:<2} Evaluate image {image_url}")
