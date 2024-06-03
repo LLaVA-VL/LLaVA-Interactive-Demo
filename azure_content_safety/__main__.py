@@ -88,26 +88,12 @@ def _analyze_text(
     global client
     if client is None:
         credential = DefaultAzureCredential()
-        # credential = ManagedIdentityCredential(client_id=app_id)
-
         client = ContentSafetyClient(endpoint, credential)
 
     request = AnalyzeTextOptions(text=input_text)
     response = client.analyze_text(request)
 
     return response
-
-
-def print_jwt_claims(token: str, claims: list[str]):
-    # decoded_token = jwt.decode(token, algorithms=["RS256"])
-    # middle_segment = token.split('.')[1].rstrip("'").lstrip("'")
-    # decoded_token_str = base64.b64decode(middle_segment).decode('utf-8')
-    # decoded_token = json.loads(decoded_token_str)
-    decoded_token = jwt.decode(token)
-
-    for claim in claims:
-        value = decoded_token.get(claim)
-        print(f"{claim}: {value}")
 
 
 def analyze_text_for_jailbreak(
