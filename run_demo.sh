@@ -24,8 +24,18 @@ if [ -z "$GUARDLIST_KEY" ]; then
   exit 1
 fi
 
-if [ -z "$CONTENT_SAFETY_OBJECT_ID" ]; then
-  echo "❗ CONTENT_SAFETY_OBJECT_ID environment variable must be set!"
+if [ -z "$AZURE_TENANT_ID" ]; then
+  echo "❗ AZURE_TENANT_ID environment variable must be set!"
+  exit 1
+fi
+
+if [ -z "$AZURE_CLIENT_ID" ]; then
+  echo "❗ AZURE_CLIENT_ID environment variable must be set!"
+  exit 1
+fi
+
+if [ -z "$AZURE_CLIENT_SECRET" ]; then
+  echo "❗ AZURE_CLIENT_SECRET environment variable must be set!"
   exit 1
 fi
 
