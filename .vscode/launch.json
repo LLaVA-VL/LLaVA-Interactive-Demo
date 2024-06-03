@@ -74,7 +74,10 @@
                 "--text_file_path",
                 "azure_content_moderator/text_files/email01.txt",
             ],
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "env": {
+                "LOGLEVEL": "DEBUG",
+            }
         },
         {
             "name": "Python: Content Moderation - Screen Image",
