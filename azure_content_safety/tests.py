@@ -12,7 +12,6 @@ class AnalyzeTextTestCase(unittest.TestCase):
         os.environ,
         {
             "CONTENT_SAFETY_ENDPOINT": "https://mock-endpoint.cognitiveservices.azure.com/",
-            "CONTENT_SAFETY_KEY": "FakeKey",
         },
     )
     def test_analyze_text_0_severities(self):
@@ -52,7 +51,6 @@ class AnalyzeTextTestCase(unittest.TestCase):
         os.environ,
         {
             "CONTENT_SAFETY_ENDPOINT": "https://mock-endpoint.cognitiveservices.azure.com/",
-            "CONTENT_SAFETY_KEY": "FakeKey",
         },
     )
     def test_analyze_text_for_jailbreak_false(self):
@@ -79,21 +77,12 @@ class AnalyzeTextTestCase(unittest.TestCase):
             actual_result = _analyze_text_for_jailbreak(input_text=input_text)
 
             # Assert the result
-            # mock_httpx_post.assert_called_once_with(
-            #     f"https://llava-int-contentsafety-eus.cognitiveservices.azure.com/contentsafety/text:detectJailbreak?api-version=2023-10-15-preview",
-            #     headers={
-            #         "Ocp-Apim-Subscription-Key": "FakeKey",
-            #         "Content-Type": "application/json",
-            #     },
-            #     json={"text": input_text},
-            # )
             self.assertEqual(actual_result, expected_result_json)
 
     @patch.dict(
         os.environ,
         {
             "CONTENT_SAFETY_ENDPOINT": "https://mock-endpoint.cognitiveservices.azure.com/",
-            "CONTENT_SAFETY_KEY": "FakeKey",
         },
     )
     def test_analyze_text_for_jailbreak_true(self):
