@@ -44,8 +44,7 @@
                 "output_text_aics",
             ],
             "envFile": "${workspaceFolder}/.env",
-            "env": {
-            },
+            "env": {},
         },
         {
             "name": "Python: Guardlist",
@@ -68,7 +67,7 @@
             "type": "debugpy",
             "request": "launch",
             "module": "azure_content_moderator",
-            "justMyCode": true,
+            "justMyCode": false,
             "args": [
                 "screen_text",
                 "--text_file_path",
@@ -76,7 +75,39 @@
             ],
             "envFile": "${workspaceFolder}/.env",
             "env": {
-                "LOGLEVEL": "DEBUG",
+                "LOGLEVEL": "INFO",
+            }
+        },
+        {
+            "name": "Python: Content Moderation - Screen Text REST",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "azure_content_moderator",
+            "justMyCode": false,
+            "args": [
+                "screen_text_rest",
+                "--text_file_path",
+                "azure_content_moderator/text_files/email01.txt",
+            ],
+            "envFile": "${workspaceFolder}/.env",
+            "env": {
+                "LOGLEVEL": "INFO",
+            }
+        },
+        {
+            "name": "Python: Content Moderation - Screen Text REST - Single",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "azure_content_moderator",
+            "justMyCode": false,
+            "args": [
+                "_screen_text_rest",
+                "--input_text",
+                "\"Is this a grabage email abcdef@abcd.com, phone: 4255550111, IP: 255.255.255.255, 1234 Main Boulevard, Panapolis WA 96555. Shit is the profanity here. Is this information PII? phone 2065550111\"",
+            ],
+            "envFile": "${workspaceFolder}/.env",
+            "env": {
+                "LOGLEVEL": "INFO",
             }
         },
         {
@@ -98,8 +129,7 @@
             "request": "launch",
             "module": "azure_content_safety.token_tester",
             "justMyCode": true,
-            "args": [
-            ],
+            "args": [],
             "envFile": "${workspaceFolder}/.env"
         },
         {
@@ -107,7 +137,7 @@
             "type": "debugpy",
             "request": "launch",
             "module": "azure_content_safety",
-            "justMyCode": true,
+            "justMyCode": false,
             "args": [
                 "analyze_text",
                 "--input_text",
