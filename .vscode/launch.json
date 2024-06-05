@@ -111,6 +111,22 @@
             }
         },
         {
+            "name": "Python: Content Moderation - Screen Text REST - Single - IMDS",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "azure_content_moderator",
+            "justMyCode": false,
+            "args": [
+                "_screen_text_rest_imds",
+                "--input_text",
+                "\"Is this a grabage email abcdef@abcd.com, phone: 4255550111, IP: 255.255.255.255, 1234 Main Boulevard, Panapolis WA 96555. Shit is the profanity here. Is this information PII? phone 2065550111\"",
+            ],
+            "envFile": "${workspaceFolder}/.env",
+            "env": {
+                "LOGLEVEL": "INFO",
+            }
+        },
+        {
             "name": "Python: Content Moderation - Screen Image",
             "type": "debugpy",
             "request": "launch",

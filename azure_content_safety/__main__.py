@@ -6,7 +6,7 @@ import time
 import fire
 import httpx
 import requests
-from azure.identity import DefaultAzureCredential
+from azure.identity import ManagedIdentityCredential
 from azure.ai.contentsafety import ContentSafetyClient
 from azure.ai.contentsafety.models import (
     AnalyzeImageOptions,
@@ -86,7 +86,7 @@ def _analyze_text(
 
     global client
     if client is None:
-        credential = DefaultAzureCredential()
+        credential = ManagedIdentityCredential()
         client = ContentSafetyClient(endpoint, credential)
 
     request = AnalyzeTextOptions(text=input_text)

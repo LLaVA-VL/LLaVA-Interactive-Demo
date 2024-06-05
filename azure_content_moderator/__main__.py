@@ -5,7 +5,7 @@ import httpx
 from pathlib import Path
 
 import fire
-from azure.identity import DefaultAzureCredential, EnvironmentCredential
+from azure.identity import DefaultAzureCredential, EnvironmentCredential, ManagedIdentityCredential
 from azure.cognitiveservices.vision.contentmoderator import ContentModeratorClient
 from azure.cognitiveservices.vision.contentmoderator.models import Evaluate, Screen
 
@@ -34,7 +34,8 @@ def screen_text(
     """
 
     # credential = DefaultAzureCredential()
-    credential = EnvironmentCredential()
+    # credential = EnvironmentCredential()
+    credential = ManagedIdentityCredential()
     client = ContentModeratorClient(endpoint, credential)
 
     logger.info(f'Text Moderation: {text_file_path}')
@@ -96,8 +97,48 @@ def _screen_text_rest(
     access_token = credential.get_token("https://cognitiveservices.azure.com/.default")
 
     # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentmoderator/text-moderation/screen-text?view=rest-cognitiveservices-contentmoderator-v1.0&tabs=HTTP
+    # Example from SDK: https://llava-int-contentmoderator.cognitiveservices.azure.com/contentmoderator/moderate/v1.0/ProcessText/Screen/?language=eng&autocorrect=true&PII=true&classify=false
     response = httpx.post(
-        f"{endpoint}/contentmoderator/moderate/v1.0/ProcessText/Screen/?autocorrect=true&PII=true&classify=false",
+        f"{endpoint}/contentmoderator/moderate/v1.0/ProcessText/Screen/?language=eng&autocorrect=true&PII=true&classify=false",
+        headers={
+            "Authorization": f"Bearer {access_token.token}",
+            "Content-Type": "text/plain",
+        },
+        json=input_text,
+    )
+
+    response.raise_for_status()
+    response_json = response.json()
+
+    return response_json
+
+
+
+def _screen_text_rest_imds(
+    input_text: str,
+    endpoint=os.environ["CONTENT_MODERATOR_ENDPOINT"],
+    imds_endpoint=os.environ["IDENTITY_ENDPOINT"],
+):
+    """Given text file path, screen the text using Azure Content Moderation Service
+
+    :param text_file_path: Path to text file
+    :param endpoint: Content Moderation Service Endpoint, defaults to os.environ["CONTENT_MODERATOR_ENDPOINT"]
+    """
+
+    challenge_response = httpx.post(
+        f"{imds_endpoint}?api-version=2019-11-01&resource=https%3A%2F%2Fmanagement.azure.com",
+        headers={
+            "Metadata": "true",
+        },
+    )
+
+    challenge_response.raise_for_status()
+    print(challenge_response)
+
+    # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentmoderator/text-moderation/screen-text?view=rest-cognitiveservices-contentmoderator-v1.0&tabs=HTTP
+    # Example from SDK: https://llava-int-contentmoderator.cognitiveservices.azure.com/contentmoderator/moderate/v1.0/ProcessText/Screen/?language=eng&autocorrect=true&PII=true&classify=false
+    response = httpx.post(
+        f"{endpoint}/contentmoderator/moderate/v1.0/ProcessText/Screen/?language=eng&autocorrect=true&PII=true&classify=false",
         headers={
             "Authorization": f"Bearer {access_token.token}",
             "Content-Type": "text/plain",
