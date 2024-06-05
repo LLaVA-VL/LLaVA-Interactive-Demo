@@ -48,9 +48,9 @@ yacs==0.1.8
 clip @ git+https://github.com/openai/CLIP.git@a9b1bf5920416aaeaec965c25dd9e8f98c864f16
 openai-whisper @ git+https://github.com/openai/whisper.git@248b6cb124225dd263bb9bd32d060b6517e067f8
 einops @ git+https://github.com/arogozhnikov/einops.git
-detectron2 @ git+https://github.com/maureenzou/detectron2-xyz.git@42121d75e10d9f858f3a91b6a39f5722c02868f0
+# detectron2 @ git+https://github.com/maureenzou/detectron2-xyz.git@42121d75e10d9f858f3a91b6a39f5722c02868f0
 gradio @ git+https://github.com/wchen-github/gradio.git
 azure-identity==1.16.0
 azure-ai-contentsafety==1.0.0
 azure-cognitiveservices-vision-contentmoderator==1.0.0
-fire==0.5.0
+fire==0.6.0
