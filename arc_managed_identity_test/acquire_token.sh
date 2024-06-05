@@ -1,6 +1,16 @@
 #! /bin/bash
 
-CHALLENGE_TOKEN_LINE=$(curl -s -D - -H Metadata:true "http://127.0.0.1:40342/metadata/identity/oauth2/token?api-version=2019-11-01&resource=https%3A%2F%2Fmanagement.azure.com" | grep Www-Authenticate)
+# How to inheret these from parent shell while using `sudo`?
+# IMDS_ENDPOINT=http://localhost:40342
+# IMDS_ENDPOINT=http://0.0.0.0:40342
+IMDS_ENDPOINT=http://host.docker.internal:40342
+IDENTITY_ENDPOINT="${IMDS_ENDPOINT}/metadata/identity/oauth2/token"
+
+echo "Identity endpoint: $IDENTITY_ENDPOINT"
+MANAGEMENT_ENDPOINT="$IDENTITY_ENDPOINT?api-version=2019-11-01&resource=https%3A%2F%2Fmanagement.azure.com"
+echo "Management endpoint: $MANAGEMENT_ENDPOINT"
+
+CHALLENGE_TOKEN_LINE=$(curl -s -D - -H Metadata:true $MANAGEMENT_ENDPOINT | grep Www-Authenticate)
 CHALLENGE_TOKEN_PATH=$(echo $CHALLENGE_TOKEN_LINE | cut -d "=" -f 2 | tr -d "[:cntrl:]")
 echo "Challenge token path: $CHALLENGE_TOKEN_PATH"
 
@@ -17,7 +27,7 @@ echo "Challenge token read: ${CHALLENGE_TOKEN:0:10}...${CHALLENGE_TOKEN: -10}"
 MANAGEMENT_ACCESS_TOKEN_RESPONSE=$(curl -s \
   -H Metadata:true \
   -H "Authorization: Basic $CHALLENGE_TOKEN" \
-  "http://127.0.0.1:40342/metadata/identity/oauth2/token?api-version=2019-11-01&resource=https%3A%2F%2Fmanagement.azure.com")
+  $MANAGEMENT_ENDPOINT)
 
 MANAGEMENT_ACCESS_TOKEN=$(echo $MANAGEMENT_ACCESS_TOKEN_RESPONSE | jq -r .access_token)
 echo "Magagement Access token: ${MANAGEMENT_ACCESS_TOKEN:0:10}...${MANAGEMENT_ACCESS_TOKEN: -10}"
@@ -25,12 +35,12 @@ echo "Magagement Access token: ${MANAGEMENT_ACCESS_TOKEN:0:10}...${MANAGEMENT_AC
 # MANAGEMENT_ACCESS_TOKEN_RESPONSE_2=$(curl -s \
 #   -H Metadata:true \
 #   -H "Authorization: Basic $CHALLENGE_TOKEN" \
-#   "http://127.0.0.1:40342/metadata/identity/oauth2/token?api-version=2019-11-01&resource=https%3A%2F%2Fmanagement.azure.com")
+#   $MANAGEMENT_ENDPOINT)
 
 # MANAGEMENT_ACCESS_TOKEN_2=$(echo $MANAGEMENT_ACCESS_TOKEN_RESPONSE_2 | jq -r .access_token)
 # echo "Magagement Access token: ${MANAGEMENT_ACCESS_TOKEN_2:0:10}...${MANAGEMENT_ACCESS_TOKEN_2: -10}"
 
-CHALLENGE_TOKEN_LINE=$(curl -s -D - -H Metadata:true "http://127.0.0.1:40342/metadata/identity/oauth2/token?api-version=2019-11-01&resource=https%3A%2F%2Fmanagement.azure.com" | grep Www-Authenticate)
+CHALLENGE_TOKEN_LINE=$(curl -s -D - -H Metadata:true $MANAGEMENT_ENDPOINT | grep Www-Authenticate)
 CHALLENGE_TOKEN_PATH=$(echo $CHALLENGE_TOKEN_LINE | cut -d "=" -f 2 | tr -d "[:cntrl:]")
 echo "Challenge token path: $CHALLENGE_TOKEN_PATH"
 
@@ -47,7 +57,7 @@ echo "Challenge token read: ${CHALLENGE_TOKEN:0:10}...${CHALLENGE_TOKEN: -10}"
 COGNITIVE_SERVICES_ACCESS_TOKEN_RESPONSE=$(curl -s \
   -H Metadata:true \
   -H "Authorization: Basic $CHALLENGE_TOKEN" \
-  "http://127.0.0.1:40342/metadata/identity/oauth2/token?api-version=2019-11-01&resource=https%3A%2F%2Fcognitiveservices.azure.com")
+  "${IDENTITY_ENDPOINT}?api-version=2019-11-01&resource=https%3A%2F%2Fcognitiveservices.azure.com")
 
 COGNITIVE_SERVICES_ACCESS_TOKEN=$(echo $COGNITIVE_SERVICES_ACCESS_TOKEN_RESPONSE | jq -r .access_token)
 echo "Cognitive Service Access token: ${COGNITIVE_SERVICES_ACCESS_TOKEN:0:10}...${COGNITIVE_SERVICES_ACCESS_TOKEN: -10}"
