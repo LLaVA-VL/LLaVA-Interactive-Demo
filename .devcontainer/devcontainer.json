@@ -59,7 +59,13 @@
             ]
         }
     },
-    "mounts": [],
+    "mounts": [
+        {
+            "source": "/var/opt",
+            "target": "/var/opt",
+            "type": "bind"
+        }
+    ],
     "runArgs": [
         "--gpus",
         "all",
@@ -69,5 +75,5 @@
         "memlock=-1",
         "--env-file",
         ".devcontainer/devcontainer.env"
-    ],
+    ]
 }
