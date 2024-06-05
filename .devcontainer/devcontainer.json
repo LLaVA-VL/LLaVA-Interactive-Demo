@@ -59,6 +59,14 @@
             ]
         }
     },
+    "forwardPorts": [
+        "40342:40342"
+    ],
+    "portsAttributes": {
+        "40342": {
+            "label": "IMDS"
+        },
+    },
     "mounts": [
         {
             "source": "/var/opt",
@@ -71,6 +79,8 @@
         "all",
         // "--ipc",
         // "host",
+        "--add-host",
+        "host.docker.internal:host-gateway",
         "--ulimit",
         "memlock=-1",
         "--env-file",
