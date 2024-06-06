@@ -95,6 +95,30 @@ def _analyze_text(
     return response
 
 
+def analyze_text_rest(
+    input_text: str,
+    endpoint: str = os.environ["CONTENT_SAFETY_ENDPOINT"],
+):
+    # Get token from IMDS proxy running on host machine outside container
+    token_response = httpx.get("http://host.docker.internal:8000/token")
+    access_token = token_response.json()["access_token"]
+
+    # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentsafety/text-operations/analyze-text?view=rest-cognitiveservices-contentsafety-2024-02-15-preview&tabs=HTTP
+    response = httpx.post(
+        f"{endpoint}contentsafety/text:analyze?api-version=2024-02-15-preview",
+        headers={
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json",
+        },
+        json={"text": input_text},
+    )
+
+    response.raise_for_status()
+    response_json = response.json()
+
+    return response_json
+
+
 def analyze_text_for_jailbreak(
     input_text: str,
     num_requests: int = 1,

@@ -179,6 +179,21 @@
             "envFile": "${workspaceFolder}/.env"
         },
         {
+            "name": "Python: Content Safety - Analyze Text REST IMDS",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "azure_content_safety",
+            "justMyCode": false,
+            "args": [
+                "analyze_text_rest",
+                "--input_text",
+                // There is some VS Code debugger auto escaping issue that doesn't allow special characters such as ?
+                // See: https://github.com/microsoft/vscode/issues/98471, https://github.com/microsoft/vscode-python/issues/13264
+                "\"Is this text Safe\""
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
             "name": "Python: Content Safety Tests - Analyze Text",
             "type": "debugpy",
             "request": "launch",
