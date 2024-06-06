@@ -1,10 +1,19 @@
 #! /bin/bash
 
 # How to inheret these from parent shell while using `sudo`?
-# IMDS_ENDPOINT=http://localhost:40342
-# IMDS_ENDPOINT=http://0.0.0.0:40342
-IMDS_ENDPOINT=http://host.docker.internal:40342
+IMDS_ENDPOINT=http://localhost:40342
+# IMDS_ENDPOINT=http://host.docker.internal:40342
 IDENTITY_ENDPOINT="${IMDS_ENDPOINT}/metadata/identity/oauth2/token"
+
+if [ -z "$IMDS_ENDPOINT" ]; then
+  echo "Error: IMDS_ENDPOINT environment variable is not set."
+  exit 1
+fi
+
+if [ -z "$IDENTITY_ENDPOINT" ]; then
+  echo "Error: IMDS_ENDPOINT environment variable is not set."
+  exit 1
+fi
 
 echo "Identity endpoint: $IDENTITY_ENDPOINT"
 MANAGEMENT_ENDPOINT="$IDENTITY_ENDPOINT?api-version=2019-11-01&resource=https%3A%2F%2Fmanagement.azure.com"

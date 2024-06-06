@@ -47,6 +47,21 @@
             "env": {},
         },
         {
+            "name": "Python: Acquire Token",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "arc_managed_identity_test.acquire_token",
+            "justMyCode": true,
+            "args": [],
+            "envFile": "${workspaceFolder}/.env",
+            "env": {
+                "LOGLEVEL": "DEBUG",
+                "IMDS_ENDPOINT": "http://localhost:40342",
+                "IDENTITY_ENDPOINT": "http://localhost:40342/metadata/identity/oauth2/token",
+            },
+            "python": "/home/mattm/miniconda3/envs/imds_proxy/bin/python",
+        },
+        {
             "name": "Python: Guardlist",
             "type": "debugpy",
             "request": "launch",
