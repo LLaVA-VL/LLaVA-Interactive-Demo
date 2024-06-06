@@ -5,8 +5,12 @@ import logging
 from rich.logging import RichHandler
 
 
-def get_challenge_token(imds_token_endpoint: str) -> str:
-    response = httpx.get(imds_token_endpoint, headers={"Metadata": "true"})
+def get_challenge_token(imds_token_endpoint: str, resource_url: str) -> str:
+    response = httpx.get(
+        imds_token_endpoint,
+        headers={"Metadata": "true"},
+        params={"api-version": "2019-11-01", "resource": resource_url},
+    )
     challenge_token_line = response.headers.get("Www-Authenticate")
     challenge_token_path = challenge_token_line.split("=")[1].strip()
     logging.info(f"Challenge token path: {challenge_token_path}")
@@ -41,25 +45,25 @@ def main(
         'IDENTITY_ENDPOINT', f'http://localhost:40342/metadata/identity/oauth2/token'
     ),
     proxy_port: int = 8000,
-    resource_url: str = "https://cognitiveservices.azure.com",
 ):
     logging.info(f'Start IMDS proxy service on port {proxy_port}...')
-    management_endpoint = f"{identity_endpoint}?api-version=2019-11-01&resource=https%3A%2F%2Fmanagement.azure.com"
     logging.info(f"IMDS endpoint: {imds_endpoint}")
     logging.info(f"Identity endpoint: {identity_endpoint}")
-    logging.info(f"Management endpoint: {management_endpoint}")
 
     # Change to remove resource and see if still works
-    challenge_token = get_challenge_token(management_endpoint)
     management_resource_url = "https://management.azure.com"
-    management_access_token = get_access_token(management_endpoint, challenge_token, management_resource_url)
+    challenge_token = get_challenge_token(identity_endpoint, management_resource_url)
+    management_access_token = get_access_token(identity_endpoint, challenge_token, management_resource_url)
 
-    challenge_token = get_challenge_token(management_endpoint)
-    cognitive_service_access_token = get_access_token(management_endpoint, challenge_token, resource_url)
+    cognitive_service_resource_url = "https://cognitiveservices.azure.com"
+    challenge_token = get_challenge_token(identity_endpoint, cognitive_service_resource_url)
+    cognitive_service_access_token = get_access_token(
+        identity_endpoint, challenge_token, cognitive_service_resource_url
+    )
 
 
 if __name__ == "__main__":
-    format='%(asctime)s | %(levelname)7s | %(name)s | %(message)s'
+    format = '%(asctime)s | %(levelname)7s | %(name)s | %(message)s'
     # format="%(message)s"
 
     logging.basicConfig(
