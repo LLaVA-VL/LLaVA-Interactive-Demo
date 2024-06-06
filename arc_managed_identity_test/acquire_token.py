@@ -50,7 +50,6 @@ def main(
     logging.info(f"IMDS endpoint: {imds_endpoint}")
     logging.info(f"Identity endpoint: {identity_endpoint}")
 
-    # Change to remove resource and see if still works
     management_resource_url = "https://management.azure.com"
     challenge_token = get_challenge_token(identity_endpoint, management_resource_url)
     management_access_token = get_access_token(identity_endpoint, challenge_token, management_resource_url)

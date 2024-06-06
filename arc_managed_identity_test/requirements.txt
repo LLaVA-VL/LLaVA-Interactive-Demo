@@ -1,3 +1,4 @@
 fire
 httpx
 rich
+fastapi

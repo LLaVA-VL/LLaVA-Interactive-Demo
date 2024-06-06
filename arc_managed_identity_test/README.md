@@ -3,7 +3,7 @@
 https://learn.microsoft.com/en-us/azure/azure-arc/servers/managed-identity-authentication
 
 
-## Verification of IMDS
+## Verification of IMDS (Bash)
 
 ### Setup
 
@@ -18,9 +18,9 @@ export IDENTITY_ENDPOINT="${IMDS_ENDPOINT}/metadata/identity/oauth2/token"
 sudo -E bash ./arc_managed_identity_test/acquire_token.sh
 ```
 
-## Host Setup
+## Python Setup
 
-### Create conda environment
+### Create environment
 
 ```
 conda create -n imds_proxy -c conda-forge -c pytorch python=3.12 -y
@@ -28,9 +28,15 @@ conda activate imds_proxy
 
 pip install -r requirements.txt
 ```
+
+### Run Acquire Token Script
+
+```bash
+sudo -E $(which python) -m arc_managed_identity_test.acquire_token
+```
+
 ### Run Start IMDS Token Proxy Service
 
 ```bash
-python -m arc_managed_identity_test.acquire_token
+sudo -E fastapi dev arc_managed_identity_test/acquire_token.py
 ```
-
