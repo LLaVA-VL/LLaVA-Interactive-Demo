@@ -59,14 +59,6 @@
             ]
         }
     },
-    "forwardPorts": [
-        "40342:40342"
-    ],
-    "portsAttributes": {
-        "40342": {
-            "label": "IMDS"
-        },
-    },
     "mounts": [
         {
             "source": "/var/opt",

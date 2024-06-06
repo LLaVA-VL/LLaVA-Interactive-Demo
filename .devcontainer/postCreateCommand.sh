@@ -29,6 +29,7 @@ conda activate llava_int
 CUDA_VERSION=11.8
 conda install -y -c nvidia cuda=$CUDA_VERSION cuda-nvcc=$CUDA_VERSION
 
+pip install setuptools==69.5.1
 pip install -r requirements.txt
 
 source setup.sh
