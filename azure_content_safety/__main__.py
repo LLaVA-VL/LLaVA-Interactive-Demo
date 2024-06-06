@@ -174,14 +174,18 @@ def _analyze_text_for_jailbreak(
     :return: dict
     """
 
-    credential = DefaultAzureCredential()
-    access_token = credential.get_token("https://cognitiveservices.azure.com/.default")
+    # credential = DefaultAzureCredential()
+    # access_token = credential.get_token("https://cognitiveservices.azure.com/.default").token
+
+    # Get token from IMDS proxy running on host machine outside container
+    token_response = httpx.get("http://host.docker.internal:8000/token")
+    access_token = token_response.json()["access_token"]
 
     # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentsafety/text-operations/detect-text-jailbreak?view=rest-cognitiveservices-contentsafety-2024-02-15-preview&tabs=HTTP
     response = httpx.post(
         f"{endpoint}/contentsafety/text:detectJailbreak?api-version=2024-02-15-preview",
         headers={
-            "Authorization": f"Bearer {access_token.token}",
+            "Authorization": f"Bearer {access_token}",
             "Content-Type": "application/json",
         },
         json={"text": input_text},
@@ -205,14 +209,18 @@ def analyze_text_for_prompt_injection(
     :return: dict
     """
 
-    credential = DefaultAzureCredential()
-    access_token = credential.get_token("https://cognitiveservices.azure.com/.default")
+    # credential = DefaultAzureCredential()
+    # access_token = credential.get_token("https://cognitiveservices.azure.com/.default").token
+
+    # Get token from IMDS proxy running on host machine outside container
+    token_response = httpx.get("http://host.docker.internal:8000/token")
+    access_token = token_response.json()["access_token"]
 
     # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentsafety/text-operations/detect-text-prompt-injection-options?view=rest-cognitiveservices-contentsafety-2024-02-15-preview&tabs=HTTP
     response = httpx.post(
         f"{endpoint}contentsafety/text:shieldPrompt?api-version=2024-02-15-preview",
         headers={
-            "Authorization": f"Bearer {access_token.token}",
+            "Authorization": f"Bearer {access_token}",
             "Content-Type": "application/json",
         },
         json={"userPrompt": input_text, "documents": []},
@@ -236,8 +244,12 @@ def analyze_text_for_protected_material(
     :return: dict
     """
 
-    credential = DefaultAzureCredential()
-    access_token = credential.get_token("https://cognitiveservices.azure.com/.default")
+    # credential = DefaultAzureCredential()
+    # access_token = credential.get_token("https://cognitiveservices.azure.com/.default").token
+
+    # Get token from IMDS proxy running on host machine outside container
+    token_response = httpx.get("http://host.docker.internal:8000/token")
+    access_token = token_response.json()["access_token"]
 
     # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentsafety/text-operations/detect-text-protected-material?view=rest-cognitiveservices-contentsafety-2024-02-15-preview&tabs=HTTP
     response = httpx.post(

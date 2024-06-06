@@ -43,3 +43,11 @@ sudo -E $(which python) -m arc_managed_identity_test.acquire_token
 ```bash
 sudo -E $(which fastapi) run arc_managed_identity_test/acquire_token_server.py
 ```
+
+# Other
+
+## Running Redirect Server
+
+```bash
+python -m arc_managed_identity_test.imds_proxy_service
+```
