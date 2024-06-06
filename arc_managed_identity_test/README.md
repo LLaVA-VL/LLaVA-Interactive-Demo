@@ -37,6 +37,9 @@ sudo -E $(which python) -m arc_managed_identity_test.acquire_token
 
 ### Run Start IMDS Token Proxy Service
 
+> Note: fastify dev binds to 127.0.0.1 which is only reachable by other localhosts
+> Note: fastify run binds to 0.0.0.0 which is reachable by other hosts such as the container
+
 ```bash
-sudo -E fastapi dev arc_managed_identity_test/acquire_token.py
+sudo -E $(which fastapi) run arc_managed_identity_test/acquire_token_server.py
 ```
