@@ -9,6 +9,7 @@ try
 }
 catch
 {
+    # Exception: Cannot index into a null array?
     $wwwAuthHeader = $_.Exception.Response.Headers["WWW-Authenticate"]
     if ($wwwAuthHeader -match "Basic realm=.+")
     {
