@@ -40,13 +40,12 @@ def get_access_token(imds_token_endpoint: str, challenge_token: str, resource_ur
 
 
 def main(
-    imds_endpoint: str = os.environ.get('IMDS_ENDPOINT', 'http://localhost:40342'),
+    imds_endpoint: str = os.environ.get('IMDS_ENDPOINT', 'http://host.docker.internal:40342'),
     identity_endpoint: str = os.environ.get(
-        'IDENTITY_ENDPOINT', f'http://localhost:40342/metadata/identity/oauth2/token'
+        'IDENTITY_ENDPOINT', f'http://host.docker.internal:40342/metadata/identity/oauth2/token'
     ),
     proxy_port: int = 8000,
 ):
-    logging.info(f'Start IMDS proxy service on port {proxy_port}...')
     logging.info(f"IMDS endpoint: {imds_endpoint}")
     logging.info(f"Identity endpoint: {identity_endpoint}")
 
@@ -72,7 +71,7 @@ if __name__ == "__main__":
         handlers=[RichHandler(rich_tracebacks=True, markup=False)],
     )
 
-    logger_blocklist = ["azure", "msal", "azureml", "urllib3", "msrest", "asyncio", "httpx"]
+    logger_blocklist = ["azure", "msal", "azureml", "urllib3", "msrest", "asyncio", "httpx", "httpcore"]
     for module in logger_blocklist:
         logging.getLogger(module).setLevel(logging.WARNING)
 
