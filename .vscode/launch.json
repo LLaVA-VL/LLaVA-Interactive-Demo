@@ -59,7 +59,6 @@
                 "IMDS_ENDPOINT": "http://localhost:40342",
                 "IDENTITY_ENDPOINT": "http://localhost:40342/metadata/identity/oauth2/token",
             },
-            "python": "/home/mattm/miniconda3/envs/imds_proxy/bin/python",
         },
         {
             "name": "Python: Guardlist",
@@ -191,7 +190,10 @@
                 // See: https://github.com/microsoft/vscode/issues/98471, https://github.com/microsoft/vscode-python/issues/13264
                 "\"Is this text Safe\""
             ],
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "env": {
+                "LOGLEVEL": "DEBUG",
+            }
         },
         {
             "name": "Python: Content Safety Tests - Analyze Text",
@@ -250,6 +252,19 @@
             "justMyCode": true,
             "args": [
                 "analyze_image",
+                "--image_url",
+                "https://raw.githubusercontent.com/Azure/azure-sdk-for-python/main/sdk/contentsafety/azure-ai-contentsafety/samples/sample_data/image.jpg"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "name": "Python: Content Safety - Analyze Image REST IMDS",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "azure_content_safety",
+            "justMyCode": true,
+            "args": [
+                "analyze_image_rest",
                 "--image_url",
                 "https://raw.githubusercontent.com/Azure/azure-sdk-for-python/main/sdk/contentsafety/azure-ai-contentsafety/samples/sample_data/image.jpg"
             ],

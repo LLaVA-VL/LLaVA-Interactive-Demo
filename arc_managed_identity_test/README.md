@@ -8,7 +8,8 @@ https://learn.microsoft.com/en-us/azure/azure-arc/servers/managed-identity-authe
 ### Setup
 
 ```bash
-export IMDS_ENDPOINT=http://host.docker.internal:40342
+# export IMDS_ENDPOINT="http://host.docker.internal:8000"
+export IMDS_ENDPOINT="http://localhost:40342"
 export IDENTITY_ENDPOINT="${IMDS_ENDPOINT}/metadata/identity/oauth2/token"
 ```
 

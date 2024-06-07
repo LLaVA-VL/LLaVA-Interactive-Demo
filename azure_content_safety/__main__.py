@@ -6,18 +6,14 @@ import time
 import fire
 import httpx
 import requests
-from azure.identity import ManagedIdentityCredential
 from azure.ai.contentsafety import ContentSafetyClient
-from azure.ai.contentsafety.models import (
-    AnalyzeImageOptions,
-    AnalyzeTextOptions,
-    ImageData,
-)
+from azure.ai.contentsafety.models import AnalyzeImageOptions, AnalyzeImageResult, AnalyzeTextOptions, ImageData
 from azure.core.exceptions import HttpResponseError
+from azure.identity import ManagedIdentityCredential
 
 from .logger import get_logger
 
-logger = get_logger(__name__, logger_blocklist=["azure", "azure.core", "azure.ai"])
+logger = get_logger(__name__, logger_blocklist=["azure", "azure.core", "azure.ai", "httpx", "httpcore", "urllib3", "msal"])
 
 
 def analyze_text(
@@ -95,13 +91,57 @@ def _analyze_text(
     return response
 
 
+def _get_challenge_token(imds_token_endpoint: str, resource_url: str) -> str:
+    response = httpx.get(
+        imds_token_endpoint,
+        headers={"Metadata": "true"},
+        params={"api-version": "2019-11-01", "resource": resource_url},
+    )
+    challenge_token_line = response.headers.get("Www-Authenticate")
+    challenge_token_path = challenge_token_line.split("=")[1].strip()
+    logger.info(f"Challenge token path: {challenge_token_path}")
+
+    with open(challenge_token_path, "r") as file:
+        challenge_token = file.read()
+
+    if not challenge_token:
+        logger.warn("Could not retrieve challenge token, double check that this command is run with root privileges.")
+        exit(1)
+
+    logger.info(f"Challenge token read: {challenge_token[:10]}...{challenge_token[-10:]}")
+    return challenge_token
+
+
+def _get_access_token(imds_token_endpoint: str, challenge_token: str, resource_url: str) -> str:
+    response = httpx.get(
+        imds_token_endpoint,
+        headers={"Metadata": "true", "Authorization": f"Basic {challenge_token}"},
+        params={"api-version": "2019-11-01", "resource": resource_url},
+    )
+    response.raise_for_status()
+    access_token_response = response.json()
+    access_token = access_token_response.get("access_token")
+    logger.info(f"Access token: {access_token[:10]}...{access_token[-10:]}")
+
+    return access_token_response
+
+
+def get_access_token(imds_token_endpoint: str, resource_url: str) -> str:
+    challenge_token = _get_challenge_token(imds_token_endpoint, resource_url)
+    access_token = _get_access_token(imds_token_endpoint, challenge_token, resource_url)
+
+    return access_token
+
+
 def analyze_text_rest(
     input_text: str,
     endpoint: str = os.environ["CONTENT_SAFETY_ENDPOINT"],
+    imds_token_endpoint: str = os.environ["IDENTITY_ENDPOINT"],
 ):
     # Get token from IMDS proxy running on host machine outside container
-    token_response = httpx.get("http://host.docker.internal:8000/token")
-    access_token = token_response.json()["access_token"]
+    resource_url = "https://cognitiveservices.azure.com"
+    token_response = get_access_token(imds_token_endpoint, resource_url)
+    access_token = token_response["access_token"]
 
     # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentsafety/text-operations/analyze-text?view=rest-cognitiveservices-contentsafety-2024-02-15-preview&tabs=HTTP
     response = httpx.post(
@@ -165,6 +205,7 @@ def analyze_text_for_jailbreak(
 def _analyze_text_for_jailbreak(
     input_text: str,
     endpoint: str = os.environ["CONTENT_SAFETY_ENDPOINT"],
+    imds_token_endpoint: str = os.environ["IDENTITY_ENDPOINT"],
 ):
     """Test the Azure Content Safety Jailbreak API.
 
@@ -174,12 +215,8 @@ def _analyze_text_for_jailbreak(
     :return: dict
     """
 
-    # credential = DefaultAzureCredential()
-    # access_token = credential.get_token("https://cognitiveservices.azure.com/.default").token
-
-    # Get token from IMDS proxy running on host machine outside container
-    token_response = httpx.get("http://host.docker.internal:8000/token")
-    access_token = token_response.json()["access_token"]
+    credential = ManagedIdentityCredential()
+    access_token = credential.get_token("https://cognitiveservices.azure.com/.default").token
 
     # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentsafety/text-operations/detect-text-jailbreak?view=rest-cognitiveservices-contentsafety-2024-02-15-preview&tabs=HTTP
     response = httpx.post(
@@ -200,6 +237,7 @@ def _analyze_text_for_jailbreak(
 def analyze_text_for_prompt_injection(
     input_text: str,
     endpoint: str = os.environ["CONTENT_SAFETY_ENDPOINT"],
+    imds_token_endpoint: str = os.environ["IDENTITY_ENDPOINT"],
 ):
     """Test the Azure Content Safety Protected Material API.
 
@@ -209,12 +247,8 @@ def analyze_text_for_prompt_injection(
     :return: dict
     """
 
-    # credential = DefaultAzureCredential()
-    # access_token = credential.get_token("https://cognitiveservices.azure.com/.default").token
-
-    # Get token from IMDS proxy running on host machine outside container
-    token_response = httpx.get("http://host.docker.internal:8000/token")
-    access_token = token_response.json()["access_token"]
+    credential = ManagedIdentityCredential()
+    access_token = credential.get_token("https://cognitiveservices.azure.com/.default").token
 
     # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentsafety/text-operations/detect-text-prompt-injection-options?view=rest-cognitiveservices-contentsafety-2024-02-15-preview&tabs=HTTP
     response = httpx.post(
@@ -235,6 +269,7 @@ def analyze_text_for_prompt_injection(
 def analyze_text_for_protected_material(
     input_text: str,
     endpoint: str = os.environ["CONTENT_SAFETY_ENDPOINT"],
+    imds_token_endpoint: str = os.environ["IDENTITY_ENDPOINT"],
 ):
     """Test the Azure Content Safety Protected Material API.
 
@@ -244,18 +279,14 @@ def analyze_text_for_protected_material(
     :return: dict
     """
 
-    # credential = DefaultAzureCredential()
-    # access_token = credential.get_token("https://cognitiveservices.azure.com/.default").token
-
-    # Get token from IMDS proxy running on host machine outside container
-    token_response = httpx.get("http://host.docker.internal:8000/token")
-    access_token = token_response.json()["access_token"]
+    credential = ManagedIdentityCredential()
+    access_token = credential.get_token("https://cognitiveservices.azure.com/.default").token
 
     # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentsafety/text-operations/detect-text-protected-material?view=rest-cognitiveservices-contentsafety-2024-02-15-preview&tabs=HTTP
     response = httpx.post(
         f"{endpoint}/contentsafety/text:detectProtectedMaterial?api-version=2024-02-15-preview",
         headers={
-            "Authorization": f"Bearer {access_token.token}",
+            "Authorization": f"Bearer {access_token}",
             "Content-Type": "application/json",
         },
         json={"text": input_text},
@@ -293,7 +324,7 @@ def analyze_image(
         ```
     """
 
-    credential = DefaultAzureCredential()
+    credential = ManagedIdentityCredential()
     client = ContentSafetyClient(endpoint, credential)
 
     for i in range(num_requests):
@@ -304,6 +335,7 @@ def analyze_image(
             image_base64_str = image_base64.decode('utf-8')
             logger.info(f'Request: {i+1:<2} Analyze Image: {image_url}')
             request = AnalyzeImageOptions(image=ImageData(content=image_base64_str))
+            request.as_dict()
             response = client.analyze_image(request)
 
             for category in response.categories_analysis:
@@ -319,6 +351,42 @@ def analyze_image(
             raise
 
         time.sleep(interval_seconds)
+
+
+def analyze_image_rest(
+    image_url: str,
+    endpoint: str = os.environ['CONTENT_SAFETY_ENDPOINT'],
+    imds_token_endpoint: str = os.environ["IDENTITY_ENDPOINT"],
+):
+    logger.info(f'Analyze Image: {image_url}')
+    response = requests.get(image_url)
+    image_bytes = response.content
+    image_base64 = base64.b64encode(image_bytes)
+    image_base64_str = image_base64.decode('utf-8')
+    request = AnalyzeImageOptions(image=ImageData(content=image_base64_str))
+    request_body = request.as_dict()
+
+    # Get token from IMDS proxy running on host machine outside container
+    resource_url = "https://cognitiveservices.azure.com"
+    token_response = get_access_token(imds_token_endpoint, resource_url)
+    access_token = token_response["access_token"]
+
+    # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentsafety/text-operations/detect-text-protected-material?view=rest-cognitiveservices-contentsafety-2024-02-15-preview&tabs=HTTP
+    response = httpx.post(
+        f"{endpoint}/contentsafety/image:analyze?api-version=2024-02-15-preview",
+        headers={
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json",
+        },
+        json=request_body,
+    )
+
+    response.raise_for_status()
+    response_json = response.json()
+    analyze_image_result = AnalyzeImageResult._deserialize(response_json, [])
+
+    for category in analyze_image_result.categories_analysis:
+        logger.info(f"{category.category} severity: {category.severity}")
 
 
 if __name__ == "__main__":

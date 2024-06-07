@@ -5,7 +5,7 @@ import httpx
 from pathlib import Path
 
 import fire
-from azure.identity import DefaultAzureCredential, EnvironmentCredential, ManagedIdentityCredential
+from azure.identity import ManagedIdentityCredential
 from azure.cognitiveservices.vision.contentmoderator import ContentModeratorClient
 from azure.cognitiveservices.vision.contentmoderator.models import Evaluate, Screen
 
@@ -33,13 +33,8 @@ def screen_text(
         ```
     """
 
-    credential = DefaultAzureCredential()
-    # credential = EnvironmentCredential()
-    # credential = ManagedIdentityCredential()
+    credential = ManagedIdentityCredential()
     client = ContentModeratorClient(endpoint, credential)
-
-    token_response = httpx.get("http://host.docker.internal:8000/token")
-    token = token_response.json()["access_token"]
 
     logger.info(f'Text Moderation: {text_file_path}')
     with open(text_file_path, "rb") as text_file:
@@ -51,7 +46,6 @@ def screen_text(
                 language="eng",
                 autocorrect=True,
                 pii=True,
-                custom_headers={"Authorization": f"Bearer {token}"},
             )
             assert isinstance(screen, Screen)
             logger.info(f'Reqest: {i+1:<2} Text Moderation: Screen Text Response')
@@ -102,7 +96,7 @@ def _screen_text_rest(
     :param endpoint: Content Moderation Service Endpoint, defaults to os.environ["CONTENT_MODERATOR_ENDPOINT"]
     """
 
-    credential = DefaultAzureCredential()
+    credential = ManagedIdentityCredential()
     access_token = credential.get_token("https://cognitiveservices.azure.com/.default")
 
     # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentmoderator/text-moderation/screen-text?view=rest-cognitiveservices-contentmoderator-v1.0&tabs=HTTP
@@ -141,7 +135,7 @@ def screen_image(
         ```
     """
 
-    credential = DefaultAzureCredential()
+    credential = ManagedIdentityCredential()
     client = ContentModeratorClient(endpoint, credential)
 
     for i in range(num_requests):

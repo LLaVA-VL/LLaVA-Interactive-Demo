@@ -40,9 +40,9 @@ def get_access_token(imds_token_endpoint: str, challenge_token: str, resource_ur
 
 
 def main(
-    imds_endpoint: str = os.environ.get('IMDS_ENDPOINT', 'http://host.docker.internal:40342'),
+    imds_endpoint: str = os.environ.get('IMDS_ENDPOINT', 'http://host.docker.internal:8000'),
     identity_endpoint: str = os.environ.get(
-        'IDENTITY_ENDPOINT', f'http://host.docker.internal:40342/metadata/identity/oauth2/token'
+        'IDENTITY_ENDPOINT', f'http://host.docker.internal:8000/metadata/identity/oauth2/token'
     ),
     proxy_port: int = 8000,
 ):

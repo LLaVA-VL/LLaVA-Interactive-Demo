@@ -1,14 +1,10 @@
 import json
-from azure.identity import DefaultAzureCredential
 import jwt
-import httpx
+from azure.identity import ManagedIdentityCredential
 
-# credential = DefaultAzureCredential()
-# token = credential.get_token("https://management.azure.com/.default").token
+credential = ManagedIdentityCredential()
+token = credential.get_token("https://management.azure.com/.default").token
 
-# Get token from IMDS proxy running on host machine outside container
-token_response = httpx.get("http://host.docker.internal:8000/token")
-token = token_response.json()["access_token"]
 print(token)
 
 try:
