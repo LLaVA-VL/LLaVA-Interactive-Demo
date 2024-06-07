@@ -105,7 +105,7 @@ def analyze_text_rest(
 
     # https://learn.microsoft.com/en-us/rest/api/cognitiveservices/contentsafety/text-operations/analyze-text?view=rest-cognitiveservices-contentsafety-2024-02-15-preview&tabs=HTTP
     response = httpx.post(
-        f"{endpoint}contentsafety/text:analyze?api-version=2024-02-15-preview",
+        f"{endpoint}/contentsafety/text:analyze?api-version=2024-02-15-preview",
         headers={
             "Authorization": f"Bearer {access_token}",
             "Content-Type": "application/json",
