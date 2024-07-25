@@ -3,7 +3,9 @@
 
 *An All-in-One Demo for Image Chat, Segmentation and Generation/Editing.*
 
-[[Project Page](https://llava-vl.github.io/llava-interactive/)] [[Demo](https://llavainteractive.ngrok.app/)] [[Paper](https://arxiv.org/abs/2311.00571)]
+[[Project Page](https://llava-vl.github.io/llava-interactive/)] <s>[Demo]</s> [[Paper](https://arxiv.org/abs/2311.00571)]
+
+> ⚠️ As of Jun 10, 2024 the live demo or playground website is disabled.
 
 <p align="center">
     <img src="https://github.com/LLaVA-VL/llava-interactive/blob/main/images/llava_interactive_logo.png" width="45%">
